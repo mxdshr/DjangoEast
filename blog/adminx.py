@@ -22,6 +22,8 @@ class PostAdmin(object):
     # 不显示某一字段
     exclude = ['']
 
+    list_display_link = ['title']
+
     # style_fields = {'body':'ueditor'}
 
 class CategoryAdmin(object):
