@@ -89,7 +89,7 @@ class Categories(ListView):
 class BooksView(ListView):
     template_name = 'blog/books.html'
     context_object_name = 'books'
-    paginate_by = 9
+    paginate_by = 8
 
     def get_queryset(self):
         return Book.objects.all().order_by('-pk')
@@ -97,7 +97,7 @@ class BooksView(ListView):
 class BookListView(ListView):
     template_name = 'blog/book_list.html'
     context_object_name = 'books'
-    paginate_by = 9
+    paginate_by = 8
 
     def get_queryset(self):
         tag = get_object_or_404(BookTag,pk = self.kwargs.get('pk'))
@@ -124,7 +124,7 @@ def book_detail(request,pk):
 class MoviesView(ListView):
     template_name = 'blog/movies.html'
     context_object_name = 'movies'
-    paginate_by = 9
+    paginate_by = 8
 
     def get_queryset(self):
         return Movie.objects.all().order_by('-created_time')
@@ -132,7 +132,7 @@ class MoviesView(ListView):
 class MovieListView(ListView):
     template_name = 'blog/movies_list.html'
     context_object_name = 'movies'
-    paginate_by = 9
+    paginate_by = 8
 
     def get_queryset(self):
         tag = get_object_or_404(MovieTag,pk = self.kwargs.get('pk'))

@@ -3,7 +3,7 @@
 
 
 {% block meta %}
-<title>我的影单-DjangoEast</title>
+<title>我的影单-向东的笔记本</title>
 {% endblock %}
 
 {% block article %}
@@ -21,9 +21,9 @@
                                 </div>
 
                                 {% if movie.detail != "" %}
-                                    <a href="{{ movie.get_absolute_url }}" target="_blank"><img class="thumb" style="width: 190px; height: 260px; display: inline;"  alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}"></a>
+                                    <a href="{{ movie.get_absolute_url }}" target="_blank"><img class="thumb" style="width: 190px; height: 230px; display: inline;"  alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}"></a>
                                 {% else %}
-                                    <img class="thumb" style="width: 190px; height: 260px; display: inline;"  alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}">
+                                    <img class="thumb" style="width: 190px; height: 230px; display: inline;"  alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}">
                                 {% endif %}
 
                             </div>

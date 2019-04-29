@@ -4057,9 +4057,9 @@ ul.breadcrumb li+li:last-child {
 }
 
 .span_1_of_4 {
-	width:30%;
+	width:25%;
 	border-radius:0 0 5px 5px;
-    margin-left:23px;
+    /*margin-left:23px;*/
 }
 
 .card-item:hover {

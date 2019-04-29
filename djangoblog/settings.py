@@ -29,22 +29,22 @@ SECRET_KEY = 'v8_ce#n3lleuhl(t4p^x)bd18_aarlmd$e!f*^4edjlm@*=9&)'
 
 
 # Application definition
-
 INSTALLED_APPS = [
+    'blog',
+    'xadmin',
+    'crispy_forms',
+    'haystack',
+    'mdeditor',
+    'comment',
+    'ckeditor',
+    'django.contrib.sitemaps',  # 网站地图
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog',
-    'xadmin',
-    'crispy_forms',
-    'haystack',
-    'mdeditor',
-    'gunicorn',
-    'comment',
-    'ckeditor',
 ]
 
 CKEDITOR_CONFIGS = {
@@ -85,7 +85,6 @@ CKEDITOR_CONFIGS = {
 }
 
 
-
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'blog.whoosh_cn_backend.WhooshEngine',
@@ -95,9 +94,6 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
-# 缓存时间
-CACHE_MIDDLEWARE_SECONDS=900
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -106,18 +102,12 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware', # django-debug-tool
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 缓存全站
-    'django.middleware.cache.UpdateCacheMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
+
 
 ROOT_URLCONF = 'djangoblog.urls'
 
-# django debug tool
-INTERNAL_IPS = ("127.0.0.1",)
 
 TEMPLATES = [
     {
@@ -145,9 +135,9 @@ WSGI_APPLICATION = 'djangoblog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': '数据库名',
-        'USER':'数据库账户名',
-        'PASSWORD':'数据库账户密码',
+        'NAME': 'django_east',
+        'USER':'django_east',
+        'PASSWORD':'123456',
         'PORT':'3306',
         'HOST':'localhost',
     }
@@ -198,3 +188,4 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
