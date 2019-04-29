@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'mdeditor',
     'comment',
     'ckeditor',
+    'setting',
     'django.contrib.sitemaps',  # 网站地图
 
     'django.contrib.admin',

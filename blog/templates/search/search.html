@@ -12,7 +12,6 @@
 
                         <!--文章标题-->
                         <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
-                            <a class="label label-important" href="{% url 'blog:category' post.object.category.id %}">{{ post.object.category }}<i class="label-arrow"></i></a>
                             <h2 class="post-title" itemprop="name headline"><a title="{{ post.object.title }}" href="{{ post.object.get_absolute_url }}" class="post-title-link" itemprop="url">{% highlight post.object.title with query %}</a></h2>
                         </header>
 

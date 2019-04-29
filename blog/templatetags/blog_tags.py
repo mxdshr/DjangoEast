@@ -1,4 +1,5 @@
-from ..models import *
+from blog.models import *
+from setting.models import *
 from django import template
 from django.db.models import Count
 from comment.models import Comment
@@ -89,3 +90,28 @@ def get_meanList():
 def get_category():
     categories = Category.objects.all()
     return  categories
+
+@register.simple_tag
+def get_seo_info():
+    seo_info = Seo.objects.get(id=1)
+    return seo_info
+
+@register.simple_tag
+def get_friend_links():
+    links = FriendLinks.objects.all()
+    return links
+
+@register.simple_tag
+def get_custom_code():
+    custom_code = CustomCode.objects.get(id=1)
+    return custom_code
+
+@register.simple_tag
+def get_site_info():
+    site_info = SiteInfo.objects.get(id=1)
+    return site_info
+
+@register.simple_tag
+def get_social_media():
+    social_media = Social.objects.get(id=1)
+    return social_media

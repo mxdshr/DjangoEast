@@ -35,10 +35,11 @@
     }
   };
 </script>
+{% get_seo_info as seo_info %}
 {% block meta %}
-<title>我的网站</title>
-<meta name="description" content="" />
-<meta name="keywords" content="" />
+<title>{{ seo_info.title }}—{{ seo_info.sub_title }}</title>
+<meta name="description" content="{{ seo_info.description }}" />
+<meta name="keywords" content="{{ seo_info.keywords }}" />
 {% endblock %}
 </head>
 <body lang="zh-CN">
@@ -201,18 +202,17 @@
                 <!--左侧侧边栏-->
                 <div class = "content-siderbar">
 
-
+                    {% get_social_media as social_media %}
                     {% block sidebar %}
                         {% block toc_sidebar %}{% endblock %}
-
                         {% block social_sidebar %}
                             <div class="siderbar">
                                 <div class="title"><h3>社交账号</h3>
                                     <div class="social">
-                                        <a target="_blank" href="https://github.com/mxdshr/DjangoEast"><div class="social-media"><i class="fa fa-github fa-3x social-github" aria-hidden="true"></i></div></a>
-                                        <a target="_blank" href=""><div class="social-media"><i class="fa fa-weibo fa-3x social-item" aria-hidden="true"></i></div></a>
-                                        <a target="_blank" href=""><div class="social-media"><i class="fa  fa-3x social-item" aria-hidden="true"><span class="social-font">知</span></i></div></a>
-                                        <a target="_blank" href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=783342105"><div class="social-media"><i class="fa fa-qq fa-3x social-item" aria-hidden="true"></i></div></a>
+                                        <a target="_blank" href="{{ social_media.github }}"><div class="social-media"><i class="fa fa-github fa-3x social-github" aria-hidden="true"></i></div></a>
+                                        <a target="_blank" href="{{ social_media.wei_bo }}"><div class="social-media"><i class="fa fa-weibo fa-3x social-item" aria-hidden="true"></i></div></a>
+                                        <a target="_blank" href="{{ social_media.zhi_hu }}"><div class="social-media"><i class="fa  fa-3x social-item" aria-hidden="true"><span class="social-font">知</span></i></div></a>
+                                        <a target="_blank" href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin={{ social_media.qq }}"><div class="social-media"><i class="fa fa-qq fa-3x social-item" aria-hidden="true"></i></div></a>
                                     </div>
                                 </div>
                         </div>
@@ -257,27 +257,35 @@
                 <div class="footer-col">
                         <div class="content">
                         <h4 class="title">关于本站</h4>
-                        <p>1. 本站于 2019-03-05 开始上线</p>
-                        <p>2. 基于Django2.0和Python3.6开发</p>
-                        <p>3. 使用Ubuntu+Uwsgi+Nginx部署于腾讯云</p>
+                        {% get_site_info as site_info %}
+                        <p>1. 本站于 {{ site_info.created_time | date:"Y-m-d" }} 开始上线</p>
+                        <p>2. {{ site_info.development_info }}</p>
+                        <p>3. {{ site_info.arrange_info }}</p>
                         </div>
                 </div>
                 <div class="footer-col">
                         <div class="content">
                         <h4 class="title">联系站长</h4>
-                        <p>1. 微信号：reborn0502</p>
-                        <p>2. 公众号：程序员向东</p>
+                        <p>1. 微信号：{{ social_media.wechat }}</p>
+                        <p>2. 公众号：{{ social_media.official_wechat }}</p>
+                        {% get_custom_code as custom_code %}
+                        <p>3. {% autoescape off %}{{ custom_code.statistics }}{% endautoescape %}</p>
                         </div>
                 </div>
                 <div class="footer-col">
                     <div class="content">
                         <h4 class="title">友情链接</h4>
-                        <p><a href="https://github.com/mxdshr/DjangoEast" target="_blank">1. 向东的笔记本</a></p>
+                        {% get_friend_links as links %}
+                        {% for link in links %}
+                            <p><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></p>
+                        {% endfor %}
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <span itemprop="copyrightYear">© 2019 DjangoEast</span>
+                <span itemprop="copyrightYear">© 2019 {{ seo_info.title }}</span>
+                <span class="post-meta-divider">|</span>
+                <span><a href="http://www.miitbeian.gov.cn">{{ site_info.record_info}}</a></span>
             </div>
         </footer>
 
