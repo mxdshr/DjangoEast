@@ -3857,7 +3857,7 @@ ul.breadcrumb li+li:last-child {
     /*margin-top: 10px!important;*/
     padding: 0 10px;
     /*display: flow-root!important;*/
-    display: none!important;
+    /*display: none!important;*/
   }
 
   .newsbox section {
@@ -3944,12 +3944,12 @@ ul.breadcrumb li+li:last-child {
   margin:11px -11px;
   margin-top: -10px;
   margin-bottom: 0px;
-  display:flex;
+  /*display:flex;*/
 }
 
 .newsbox section {
     width: 50%;
-    /*float: left;*/
+    float: left;
 }
 
 .newsbox .news {

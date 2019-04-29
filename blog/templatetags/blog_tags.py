@@ -92,6 +92,11 @@ def get_category():
     return  categories
 
 @register.simple_tag
+def get_category_id(category_name):
+    category = Category.objects.get(name=category_name)
+    return category.id
+
+@register.simple_tag
 def get_seo_info():
     seo_info = Seo.objects.get(id=1)
     return seo_info

@@ -55,7 +55,7 @@ class TagsView(ListView):
 class TagListView(ListView):
     template_name = 'blog/tag_list.html'
     context_object_name = 'posts'
-    paginate_by = 5
+    paginate_by = 7
 
     def get_queryset(self):
         tag = get_object_or_404(Tag,pk = self.kwargs.get('pk'))
@@ -69,7 +69,7 @@ class TagListView(ListView):
 class CategoryView(ListView):
     template_name = 'blog/category.html'
     context_object_name = 'posts'
-    paginate_by = 5
+    paginate_by = 7
 
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
