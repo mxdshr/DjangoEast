@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'setting',
     'django.contrib.sitemaps',  # 网站地图
+    'notifications',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -190,3 +191,6 @@ STATIC_ROOT = os.path.join(BASE_DIR,'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+DJANGO_NOTIFICATIONS_CONFIG = {
+    'USE_JSONFIELD': True
+}
