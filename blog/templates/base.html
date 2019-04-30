@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load blog_tags %}
+{% load notifications_tags %}
 <!DOCTYPE html>
 <html class="theme-next gemini use-motion" lang="zh-CN">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -12,8 +13,13 @@
 <link rel="stylesheet" href="{% static '/blog/css/main.css' %}">
 <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
 <link rel="icon" type="image/png" sizes="32x32" href="{% static '/blog/image/favi.ico' %}">
+
+{#<link rel="stylesheet" href="{% static '/blog/bootstrap/css/bootstrap.min.css' %}">#}
+{#<script type="text/javascript" src="{% static '/blog/bootstrap/js/bootstrap.min.js' %}"></script>#}
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+
+
 <!--控制siderbar页面固定页面顶部-->
 <script id="hexo.configurations">
   var NexT = window.NexT || {};
@@ -87,6 +93,12 @@
                             </li>
                         {% endfor %}
 
+                        {% if user.is_authenticated  %}
+                        <li class="menu-item mean-right notifications">
+                            {% notifications_unread as unread_count %}
+                            <a href="{% url 'blog:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="notification_count">{{ unread_count }}</span>{% endif %}</a>
+                        </li>
+                        {% endif %}
 
                         <li class="menu-item mean-right">
                             <form action="{% url 'haystack_search' %}" class="search-form"/>

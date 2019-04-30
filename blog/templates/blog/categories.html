@@ -38,6 +38,7 @@
 {#{% endblock %}#}
 
 {% block article %}
+{#<div class="post-block archive" style="opacity: 2; display: block;">#}
 {% regroup posts|dictsort:"category_id" by category.name as post_list %}
 <div class="newsbox">
     {% for posts in post_list %}
@@ -53,4 +54,5 @@
         </section>
     {% endfor %}
 </div>
+{#</div>#}
 {% endblock %}

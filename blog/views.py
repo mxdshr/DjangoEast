@@ -6,6 +6,7 @@ from django.views.generic import ListView
 from django.contrib.auth.models import User
 from djangoblog.form import LoginForm,RegForm
 from django.shortcuts import render,get_object_or_404,redirect
+from notifications.models import  Notification
 
 
 class IndexView(ListView):
@@ -218,3 +219,21 @@ class CoursesView(ListView):
 def course(request,pk):
     course = get_object_or_404(Courses, pk=pk)
     return render(request, 'blog/course.html', context={'course':course})
+
+
+def my_notifications(request):
+    context = {}
+    return render(request,'blog/my_notifications.html',context)
+
+def my_notification(request,my_notifications_pk):
+    my_notification = get_object_or_404(Notification,pk=my_notifications_pk)
+    my_notification.unread =  False
+    my_notification.save()
+
+    return redirect(my_notification.data['url'])
+
+def delete_my_read_notifications(request):
+    notifications = request.user.notifications.read()
+    notifications.delete()
+
+    return redirect(reverse('blog:my_notifications'))

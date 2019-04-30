@@ -21,6 +21,7 @@ from django.urls import path,include
 from werobot.contrib.django import make_view
 from robot import robot
 
+
 urlpatterns = [
     path('admin/', xadmin.site.urls,name="admin"),
     path('', include('blog.urls')),
@@ -28,6 +29,7 @@ urlpatterns = [
     path('mdeditor/', include('mdeditor.urls')),
     path('comment/', include('comment.urls')),
     path('robot/',make_view(robot)),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
 
 ]
 

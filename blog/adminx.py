@@ -81,6 +81,11 @@ class CoursesAdmin(object):
     list_display = ['id','title','views','category','created_time','comments','numbers']
     model_icon = 'fa fa-gift'
 
+class MessagesAdmin(object):
+    list_display = ['id', 'name']
+    model_icon = 'fa fa-commenting'
+
+
 xadmin.site.register(Post,PostAdmin)
 xadmin.site.register(Category,CategoryAdmin)
 xadmin.site.register(Tag,TagAdmin)
@@ -96,6 +101,8 @@ xadmin.site.register(MovieTag,MovieTagAdmin)
 xadmin.site.register(MeanList,MeanListAdmin)
 
 xadmin.site.register(Courses,CoursesAdmin)
+xadmin.site.register(Messages,MessagesAdmin)
+
 # 修改xadmin的基础配置
 class BaseSetting(object):
     # 允许使用主题

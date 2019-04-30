@@ -54,6 +54,9 @@ class Post(models.Model):
 	def __str__(self):
 		return self.title
 
+	def get_user(self):
+		return self.author
+
 	# 阅读量增加1
 	def increase_views(self):
 		self.views += 1
@@ -196,9 +199,20 @@ class Movie(models.Model):
 
 class Messages(models.Model):
 	name = models.CharField(max_length=100,verbose_name="给我留言")
+	admin = models.ForeignKey(User,verbose_name='站长',on_delete=models.CASCADE,blank=True,null=True)
+
+
+	def get_absolute_url(self):
+		return reverse('blog:messages')
+
+	def get_user(self):
+		return self.admin
+
 	class Meta:
 		verbose_name = "网站留言"
 		verbose_name_plural = verbose_name
+
+
 
 class MeanList(models.Model):
 	title = models.CharField(max_length=100,verbose_name="菜单名称")
