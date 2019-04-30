@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'setting',
     'django.contrib.sitemaps',  # 网站地图
     'notifications',
+    'notice'
 
     'django.contrib.admin',
     'django.contrib.auth',

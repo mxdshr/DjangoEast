@@ -96,12 +96,12 @@
                         {% if user.is_authenticated  %}
                         <li class="menu-item mean-right notifications">
                             {% notifications_unread as unread_count %}
-                            <a href="{% url 'blog:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="notification_count">{{ unread_count }}</span>{% endif %}</a>
+                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="notification_count">{{ unread_count }}</span>{% endif %}</a>
                         </li>
                         {% endif %}
 
                         <li class="menu-item mean-right">
-                            <form action="{% url 'haystack_search' %}" class="search-form"/>
+                            <form action="{% url 'haystack_search' %}" class="search-form">
                                 <input type="search" name="q"  placeholder="搜索..." autocomplete="off"/>
                                 <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                             </form>

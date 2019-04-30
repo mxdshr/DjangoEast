@@ -1,12 +1,10 @@
 import markdown
 from .models import *
-from django.contrib import auth
 from django.db.models import Count
 from django.views.generic import ListView
 from django.contrib.auth.models import User
-from djangoblog.form import LoginForm,RegForm
-from django.shortcuts import render,get_object_or_404,redirect
-from notifications.models import  Notification
+from django.shortcuts import render,get_object_or_404
+
 
 
 class IndexView(ListView):
@@ -88,7 +86,7 @@ class Categories(ListView):
     context_object_name = 'posts'
 
 class BooksView(ListView):
-    template_name = 'blog/books.html'
+    template_name = 'book/books.html'
     context_object_name = 'books'
     paginate_by = 8
 
@@ -96,7 +94,7 @@ class BooksView(ListView):
         return Book.objects.all().order_by('-pk')
 
 class BookListView(ListView):
-    template_name = 'blog/book_list.html'
+    template_name = 'book/book_list.html'
     context_object_name = 'books'
     paginate_by = 8
 
@@ -120,10 +118,10 @@ def book_detail(request,pk):
     book.toc = md.toc
     book.increase_views()  # 阅读量加1
     tags = BookTag.objects.annotate(posts_count = Count('book')).order_by('-posts_count')
-    return render(request,'blog/book_detail.html',{'book':book,'tags':tags,})
+    return render(request, 'book/book_detail.html', {'book':book, 'tags':tags, })
 
 class MoviesView(ListView):
-    template_name = 'blog/movies.html'
+    template_name = 'movie/movies.html'
     context_object_name = 'movies'
     paginate_by = 8
 
@@ -131,7 +129,7 @@ class MoviesView(ListView):
         return Movie.objects.all().order_by('-created_time')
 
 class MovieListView(ListView):
-    template_name = 'blog/movies_list.html'
+    template_name = 'movie/movie_list.html'
     context_object_name = 'movies'
     paginate_by = 8
 
@@ -156,53 +154,8 @@ def movie_detail(request,pk):
     movie.increase_views()  # 阅读量加1
 
     tags = MovieTag.objects.annotate(movies_count = Count('movie')).order_by('-movies_count')
-    return render(request,'blog/movie_detail.html',{'movie':movie,'tags':tags,})
+    return render(request, 'movie/movie_detail.html', {'movie':movie, 'tags':tags, })
 
-
-# 显示登录页面、进行登录操作
-def login(request):
-    # 此处只有登录的操作，验证的部分在forms.py完成
-    if request.method == 'POST':
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            user = login_form.cleaned_data['user']
-            auth.login(request, user)
-            return redirect(request.GET.get('from',reverse('blog:index'))) # 重定向到上一个页面
-    else:
-        login_form = LoginForm()
-    context = {}
-    context['login_form'] = login_form
-    return render(request, 'blog/login.html', context)
-
-
-# 显示注册页面、进行注册操作
-def register(request):
-    if request.method == 'POST':
-        reg_form = RegForm(request.POST)
-        if reg_form.is_valid():
-            username = reg_form.cleaned_data['username']
-            password = reg_form.cleaned_data['password']
-            email = reg_form.cleaned_data['email']
-
-            # 注册用户
-            user = User()
-            user.username = username
-            user.email = email
-            user.set_password(password)
-            user.save()
-
-            # 注册后自动登录
-            user = auth.authenticate(username=username,password=password)
-            auth.login(request,user)
-
-            # 跳转到进入注册页面之前的页面
-            return redirect(request.GET.get('from',reverse('blog:index')))  # 重定向到上一个页面
-
-    else:
-        reg_form = RegForm()
-    context = {}
-    context['reg_form'] = reg_form
-    return render(request,'blog/register.html',context)
 
 def messages(request):
     messages = Messages.objects.get(pk=1)
@@ -210,7 +163,7 @@ def messages(request):
 
 
 class CoursesView(ListView):
-    template_name = 'blog/courses.html'
+    template_name = 'course/courses.html'
     context_object_name = 'courses'
 
     def get_queryset(self):
@@ -218,22 +171,6 @@ class CoursesView(ListView):
 
 def course(request,pk):
     course = get_object_or_404(Courses, pk=pk)
-    return render(request, 'blog/course.html', context={'course':course})
+    return render(request, 'course/course.html', context={'course':course})
 
 
-def my_notifications(request):
-    context = {}
-    return render(request,'blog/my_notifications.html',context)
-
-def my_notification(request,my_notifications_pk):
-    my_notification = get_object_or_404(Notification,pk=my_notifications_pk)
-    my_notification.unread =  False
-    my_notification.save()
-
-    return redirect(my_notification.data['url'])
-
-def delete_my_read_notifications(request):
-    notifications = request.user.notifications.read()
-    notifications.delete()
-
-    return redirect(reverse('blog:my_notifications'))

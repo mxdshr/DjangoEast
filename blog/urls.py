@@ -24,16 +24,9 @@ urlpatterns = [
     path('movie_detail/<int:pk>', views.movie_detail, name='movie_detail'),
     path('movie_list/<int:pk>', views.MovieListView.as_view(), name='movie_list'),
 
-    path('login/',views.login,name='login'),
-    path('register/',views.register,name='register'),
-
     path('messages/',views.messages,name='messages'),
 
     path('courses/',views.CoursesView.as_view(),name='courses'),
     path('course/<int:pk>',views.course,name='course'),
-
-    path('my_notifications/',views.my_notifications,name="my_notifications"),
-    path('my_notification/<int:my_notifications_pk>',views.my_notification,name="my_notification"),
-    path('delete_my_read_notifications', views.delete_my_read_notifications, name="delete_my_read_notifications"),
 
 ]

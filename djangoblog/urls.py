@@ -17,9 +17,9 @@ import xadmin
 from django.conf.urls.static import static
 from django.conf import settings
 from django.urls import path,include
-
 from werobot.contrib.django import make_view
 from robot import robot
+from . import views
 
 
 urlpatterns = [
@@ -28,8 +28,11 @@ urlpatterns = [
     path('search/', include('haystack.urls')),
     path('mdeditor/', include('mdeditor.urls')),
     path('comment/', include('comment.urls')),
+    path('', include('notice.urls')),
     path('robot/',make_view(robot)),
     path('notifications/', include('notifications.urls', namespace='notifications')),
+    path('login/', views.login, name='login'),
+    path('register/', views.register, name='register'),
 
 ]
 

@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.utils.html import strip_tags
 import django.utils.timezone as timezone
 from mdeditor.fields import MDTextField
+
 # 创建博文分类的表
 class Category(models.Model):
 	name = models.CharField(max_length=100,verbose_name='分类名称')
