@@ -3,88 +3,61 @@
 {% load staticfiles %}
 {% load blog_tags %}
 
-{% block article %}
+{% block content_left %}
     {% if query %}
-        {% for post in page.object_list%}
-            <section id="posts" class="posts-expand">
-                <article class="post post-type-normal">
-                    <div class="post-block posts-list" style="opacity: 1; display: block;">
-
-                        <!--文章标题-->
-                        <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
-                            <h2 class="post-title" itemprop="name headline"><a title="{{ post.object.title }}" href="{{ post.object.get_absolute_url }}" class="post-title-link" itemprop="url">{% highlight post.object.title with query %}</a></h2>
-                        </header>
-
-                        <!--文章摘要-->
-                        <div class="post-body" itemprop="articleBody" style="opacity: 1; display: block; transform: translateY(0px);">
-                              <p>{% highlight post.object.body with query %}</p>
+        <div class="django-panel">
+            {% for post in page.object_list%}
+                <div class="post-block">
+                    <div class="post-item">
+                        <div class="post-title" >
+                            <a title="{{ post.object.title }}" href="{{ post.object.get_absolute_url }}">{% highlight post.object.title with query %}</a>
                         </div>
 
-                        <!--文章信息-->
+                         <div class="post-excerpt">
+                            <p>{% highlight post.object.body with query %}</p>
+                        </div>
+
                         <div class="post-meta">
-                            <!--发表时间-->
-                            <span class="post-time">
-                                日期：{{ post.object.created_time| date:"Y-m-d" }}
-                            </span>
-
-                            <!--文章标签-->
-                            <span class="post-category">
-                                <span class="busuanzi-value" id="busuanzi_value_page_pv">标签：
-                                    {% for tag in post.object.tag.all %}
-                                        <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
-                                    {% endfor %}
-                                </span>
-                            </span>
-
-                            <!--阅读次数-->
-                            <span class="post-views">
-                                <span class="busuanzi-value" id="busuanzi_value_page_pv">
-                                    阅读({{ post.object.views }})
-                                </span>
-                            </span>
-
-                            <!--评论次数-->
-                            <span class="post-comments">
-                                <span class="busuanzi-value" id="busuanzi_value_page_pv">
-                                    评论({% get_comment_count post.object %})
-                                </span>
-                            </span>
+                            <span>日期：{{ post.object.created_time| date:"Y-m-d" }}</span>
+                            <span>分类：{{ post.category }}</span>
+                            <span>阅读({{ post.object.views }})</span>
+                            <span>评论({% get_comment_count post.object %})</span>
                         </div>
-
                     </div>
-                </article>
-                    {% empty %}
-                    <div class="post-block" style="opacity: 1; display: block;">
-                        没有找到任何结果
-                    </div>
-            </section>
-        {% endfor %}
-        <nav class="pagination" style="opacity: 1; display: block;">
+                </div>
+            {% empty %}
+                <div class="django-panel django-panel-padding">
+                    <p>Sorry......没有找到任何结果!</p>
+                    <p>请输入<strong>完整且有意义</strong>的检索关键词，比如：django</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="django-panel django-pages">
+            <nav class="pagination django-pages-ul">
+                <li><a href="?q={{ query }}&amp;?page=1"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
 
-            <!--第一页-->
-            <a class="page-style" href="?q={{ query }}&amp;?page=1"><i class="fa fa-step-backward" aria-hidden="true"></i></a>
-
-            {% if page.has_previous%}
-                <a class="page-style" href="?q={{ query }}&amp;page={{page.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
-            {% else %}
-                <span class="end-page-style page-style"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-            {% endif %}
+                {% if page.has_previous%}
+                    <li><a href="?q={{ query }}&amp;page={{page.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li><a href=""><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+                {% endif %}
 
 
-            <span class="page-style" class="current">{{ page.number }} of {{ page.paginator.num_pages }}</span>
+                <li><a href="">{{ page.number }} of {{ page.paginator.num_pages }}</a></li>
 
-            {% if page.has_next %}
-                <a class="page-style" href="?q={{ query }}&amp;page={{ page.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-            {% else %}
-                <span class="end-page-style page-style"><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
-            {% endif %}
+                {% if page.has_next %}
+                    <li><a href="?q={{ query }}&amp;page={{ page.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li><a href=""><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+                {% endif %}
 
-            <!--最后一页-->
-            <a class="page-style" href="?q={{ query }}&amp;page={{ page.paginator.num_pages }}"><i class="fa fa-step-forward" aria-hidden="true"></i></a>
+                <li><a href="?q={{ query }}&amp;page={{ page.paginator.num_pages }}"><i class="fa fa-step-forward" aria-hidden="true"></i></a></li>
+            </nav>
+        </div>
 
-            {% else %}
-            <div class="post-block" style="opacity: 1; display: block;height: 620px;">请输入关键词再进行搜索~</div>
-
-        </nav>
+    {% else %}
+        <div class="django-panel-padding django-panel">
+            请输入关键词再进行搜索~
+        </div>
     {% endif %}
 {% endblock %}

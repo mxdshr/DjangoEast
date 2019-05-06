@@ -5,23 +5,21 @@
 <title>我的书单</title>
 {% endblock %}
 
-{% block article %}
-    <div class="post-block" style="opacity: 40; display: block;">
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
         <h1 align="center">我的书单(共{% get_total_books %}本)</h1>
-        <div class="pagewrapper" style="padding-top:.1px;">
-            <div id="cardslist" class="cardlist" role="main">
-            {% for book in books %}
+            <div class="django-card">
+                {% for book in books %}
                     <div class="card col span_1_of_4" role="main">
                     <div class="card-item">
-                        <div class="thumb-img focus">
-                            <div class="metacat">
-                            <a class="metacat" href="">{{ book.category }}</a>
+                        <div class="card-cover">
+                            <div class="card-category">
+                            <a href="">{{ book.category }}</a>
                             </div>
-
                             {% if book.detail != "" %}
-                                <a href="{{ book.get_absolute_url }}"><img class="thumb" style="width: 190px; height: 230px; display: inline;"  alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}"></a>
+                                <a href="{{ book.get_absolute_url }}"><img alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}"></a>
                             {% else %}
-                                <img class="thumb" style="width: 190px; height: 230px; display: inline;"  alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}">
+                                <img alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}">
                             {% endif %}
                         </div>
                         <div class="card-detail">
@@ -29,22 +27,42 @@
                             <p>豆瓣评分：{{ book.score }}</p>
                             <p>开始时间：{{ book.time_consuming }}</p>
                         </div>
-
                     </div>
                 </div>
             {% endfor %}
-
-            </div>
         </div>
     </div>
+{% endblock %}
 
+{% block content_paginate %}
+    {% if is_paginated %}
+        <div class="django-panel django-pages">
+            <ul class="pagination django-pages-ul">
+                    <li><a href="?page=1"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></a></li>
 
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><a href=""><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% endif %}
+
+                    <li><span class="page-style" >{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                    {% if page_obj.has_next %}
+                        <li><a class="page-style" href="?page={{ page_obj.next_page_number }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><span class="end-page-style page-style"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></li>
+                    {% endif %}
+
+                    <li><a class="page-style" href="?page={{ page_obj.paginator.num_pages }}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a></li>
+            </ul>
+        </div>
+    {% endif %}
 {% endblock %}
 
 
 {% block tag_sidebar %}
-    <div class="siderbar" >
-        <div class="widget git_tag">
+    <div class="sidebar" >
             <div class="title"><h3>热门标签</h3></div>
             <div class="git_tags">
                 {% get_books_tags as tags %}
@@ -52,6 +70,5 @@
                     <a href="{{ tag.get_absolute_url  }}" data-original-title="1304个话题">{{ tag.name }}</a>
                 {% endfor %}
             </div>
-        </div>
     </div>
 {% endblock %}

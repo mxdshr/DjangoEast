@@ -82,7 +82,7 @@ class CategoryView(ListView):
 # 按分类展示文章
 class Categories(ListView):
     model = Post
-    template_name = 'blog/categories.html'
+    template_name = 'blog/category_list.html'
     context_object_name = 'posts'
 
 class BooksView(ListView):

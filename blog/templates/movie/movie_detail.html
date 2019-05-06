@@ -7,90 +7,49 @@
 <meta name="keywords" content="{% for tag in movie.tag.all %}{{ tag.name }},{% endfor %}"/>
 {% endblock %}
 
-{% block article %}
-  <div id="posts" class="posts-expand">
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  <div class="post-block article_post" style="opacity: 1; display: block;">
-      <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
-          <h2 class="post-title" itemprop="name headline">{{ movie.title }}</h2>
-        <div class="article-post-meta">
+{% block content_left %}
+    <div class="django-panel">
+        <div class="article">
+            <!--文章头部信息-->
+            <div class="article-header">
+                <h2>{{ movie.title }}</h2>
+                <div class="article-meta">
+                    <span>日期：{{ movie.created_time }}</span>
 
-            {#发布时间#}
-            <span class="post-time">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              <span itemprop="dateCreated datePublished" >{{ movie.created_time }}</span>
-              </span>
-            </span>
+                    <span>分类：<a href="" itemprop="url" rel="index">{{ movie.category }}</a></span>
 
-            {#文章分类#}
-            <span class="post-category">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-                <span itemprop="about"><a href="" itemprop="url" rel="index"><span itemprop="name">{{ movie.category }}</span></a></span>
-            </span>
+                    <span>
+                        <span>标签：
+                            {% for tag in movie.tag.all %}
+                                <a href="">{{ tag.name }}</a>
+                            {% endfor %}
+                        </span>
+                    </span>
+                    <span class="post-views">阅读（{{ movie.views }}）</span>
+                </div>
+            </div>
 
-            {#文本字数#}
-            <span class="post-symbolscount">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-{#                  <span class="post-meta-item-text">本文字数：</span>#}
-                <span title="本文字数">{{ movie.words }} 字</span>
-            </span>
+            <div class="article-body">
+                {% autoescape off %}
+                    {{ movie.detail }}
+                {% endautoescape %}
+            </div>
 
-
-            {#阅读次数：#}
-            <span class="post-meta-item-icon">
-            <i class="fa fa-eye"></i>
-            <span class="busuanzi-value" id="busuanzi_value_page_pv">{{ movie.views }}</span>
-            </span>
-
-{#            显示标签#}
-            <span class="post-meta-item-icon">
-            <i class="fa fa-tags" aria-hidden="true"></i>
-            <span class="busuanzi-value" id="busuanzi_value_page_pv">
-            {% for tag in movie.tag.all %}
-                <a href="">{{ tag.name }}</a>
-            {% endfor %}
-            </span>
-            </span>
+            <div class="article-copyright">
+                <ul>
+                  <li><strong>网站名称： </strong><a href="{% url 'blog:index' %}">向东的笔记本</a></li>
+                  <li><strong>本文链接：</strong>本文链接：<a href="{{ movie.get_absolute_url }}" title="{{ movie.name }}"> https://www.eastnotes.com{{ movie.get_absolute_url }}</a></li>
+                  <li><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+                </ul>
+            </div>
         </div>
-      </header>
-    <div class="post-body" itemprop="articleBody" style="opacity: 1; display: block; transform: translateY(0px);">
-        <!--自动解析html代码-->
-        {% autoescape off %}
-            {{ movie.detail }}
-        {% endautoescape %}
     </div>
+{% endblock %}
 
-<div>
-    <br>
-<ul class="post-copyright">
-  <li class="post-copyright-author"><strong>网站名称： </strong><a href="{% url 'blog:index' %}">向东的笔记本</a></li>
-  <li class="post-copyright-link"><strong>本文链接：</strong><a href="{{ movie.get_absolute_url }}" title="{{ movie.name }}"> https://www.eastnotes.com{{ movie.get_absolute_url }}</a></li>
-  <li class="post-copyright-license"><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
-</ul>
-</div>
 
-{#<footer class="post-footer">#}
-{#    <div class="post-nav">#}
-{#      <div class="post-nav-next post-nav-item">#}
-{#          {% for relative_post in relativa_posts %}#}
-{#             <li class="relative_posts"><a class="relative_posts" href="{{ relative_post.get_absolute_url }}" title="{{ relative_post.title }}"><i class="fa fa-minus" aria-hidden="true"></i>{{ relative_post }}</a></li>#}
-{#          {% endfor %}#}
-{#      </div>#}
-{#    </div>#}
-{#    </footer>#}
-  </div>
-  </article>
-  </div>
-  {% endblock %}
 
 {% block tag_sidebar %}
-    <div class="tag_siderbar" >
-        <div class="widget git_tag">
+    <div class="sidebar" >
             <div class="title"><h3>热门标签</h3></div>
             <div class="git_tags">
                 {% get_movies_tags as tags %}
@@ -98,13 +57,11 @@
                     <a href="{{ tag.get_absolute_url  }}" data-original-title="1304个话题">{{ tag.name }}</a>
                 {% endfor %}
             </div>
-        </div>
     </div>
 {% endblock %}
 
 {% block toc_sidebar %}
-    <div class="siderbar" >
-        <div class="widget git_tag">
+    <div class="sidebar" >
             <div class="title">
                 <h3>文章目录</h3>
             </div>
@@ -113,6 +70,5 @@
                     {{ movie.toc }}
                     {% endautoescape %}
                 </div>
-        </div>
     </div>
 {% endblock %}

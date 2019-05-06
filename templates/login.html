@@ -1,47 +1,41 @@
 {% load staticfiles %}
-<html>
+<html lang="zh-CN">
 <head>
     <title>登录页面</title>
-    <link rel="stylesheet" href="{% static 'blog/bootstrap/css/bootstrap.min.css' %}">
-    <script type="text/javascript" src="{% static 'blog/bootstrap/js/bootstrap.min.js' %}"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'blog/bootstrap3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'blog/bootstrap3.3.7/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/base.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
 </head>
 
 <body>
-
-<!--跳转到本页面才能够把原来的页面链接传过来-->
-
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-4 col-xs-offset-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">登录</h3>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <form class="form-horizontal" method="POST">
+                <span class="heading">用户登录</span>
+                {% csrf_token %}
+                {% for field in login_form %}
+                    <div class="form-group">
+                        {{ field }}
+                        <i class="{{ field.label }}"></i>
+                        <p class="text-danger">{{ field.errors.as_text }}</p>
                     </div>
-                    <div class="panel-body">
-                        <form action="" method="POST">
-                            {% csrf_token %}
-                            {% for field in login_form %}
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field }}
-                                <p class="text-danger">{{ field.errors.as_text }}</p>
-                            {% endfor %}
-                            <span class="pull-left text-danger">{{ login_form.non_field_errors }}</span>
-                            <input type="submit" value="登录" class="btn btn-primary pull-right">
-                        </form>
-                    </div>
-                </div>
+                {% endfor %}
+
+                <span class="pull-left text-danger">{{ login_form.non_field_errors }}</span>
+                <button type="submit" class="btn btn-default">登录</button>
+            </form>
+            <div class="form-horizontal_register">
+                还没有账号？<a href="{% url 'register' %}"><button type="submit" class="btn btn-default btn-danger">注册</button></a>
             </div>
+                
         </div>
     </div>
-
-{#<form action="" method="POST">#}
-{#    {% csrf_token %}#}
-{#    {{ login_form }}#}
-{#    <input type="submit" value="登录">#}
-{#</form>#}
-
+</div>
 </body>
-
 </html>
 
 

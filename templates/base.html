@@ -2,237 +2,109 @@
 {% load blog_tags %}
 {% load notifications_tags %}
 <!DOCTYPE html>
-<html class="theme-next gemini use-motion" lang="zh-CN">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
+<html lang="zh-CN">
 <head>
-<base target="_self">
-<link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
-<link rel="stylesheet" href="{% static '/blog/css/main.css' %}">
-<link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
-<link rel="icon" type="image/png" sizes="32x32" href="{% static '/blog/image/favi.ico' %}">
+    <base target="_self">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
 
-{#<link rel="stylesheet" href="{% static '/blog/bootstrap/css/bootstrap.min.css' %}">#}
-{#<script type="text/javascript" src="{% static '/blog/bootstrap/js/bootstrap.min.js' %}"></script>#}
-<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
-<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/blog/image/favi.ico' %}">
+    <script type="text/javascript" src="{% static '/blog/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/base.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/bootstrap3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static '/blog/bootstrap3.3.7/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    {% block meta %}{% endblock %}
 
-
-<!--控制siderbar页面固定页面顶部-->
-<script id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Gemini',
-    version: '6.7.0',
-    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false,"b2t":true,"scrollpercent":true},
-    fancybox: false,
-    fastclick: false,
-    lazyload: false,
-    tabs: true,
-    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-    }
-  };
-</script>
-{% get_seo_info as seo_info %}
-{% block meta %}
-<title>{{ seo_info.title }}—{{ seo_info.sub_title }}</title>
-<meta name="description" content="{{ seo_info.description }}" />
-<meta name="keywords" content="{{ seo_info.keywords }}" />
-{% endblock %}
 </head>
+
 <body lang="zh-CN">
-    <div class="container sidebar-position-left page-home">
-        <!--页面顶部黑线-->
-{#        <div class="headband"></div>#}
-
-        <!--LOGO & 导航栏-->
-        <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
-            <div class="header-inner">
-                <!--LOGO区域-->
-                <div class="site-brand-wrapper">
-                    <!--PC端LOGO区-->
-                    <div class="site-meta">
-                        <div class="custom-logo-site-title">
-                            <a href="{% url 'blog:index' %}" class="brand" rel="start" style="opacity: 1;">
-                                <span class="logo-line-before"><i></i></span>
-                                <span class="site-title" style="opacity: 1; top: 0px;">向东的笔记本</span>
-                                <span class="logo-line-after"><i></i></span>
-                            </a>
-                        </div>
-                        <h1 class="site-subtitle" itemprop="description" style="opacity: 1; top: 0px;">投其所好</h1>
-                    </div>
-
-                    <!--移动端LOGO区-->
-                    <div class="site-nav-toggle">
-                        <button aria-label="切换导航栏">
-                          <span class="btn-bar"></span>
-                          <span class="btn-bar"></span>
-                          <span class="btn-bar"></span>
-{#                            <i class="fa fa-home fa-lg" aria-hidden="true"></i>#}
-                        </button>
-                    </div>
-                </div>
-                <!--导航栏-->
-                <nav class="site-nav main-inner">
-                    <ul id="menu" class="menu">
-                        {% get_meanList as means %}
-                        <li class="menu-item">
-                            <a href="{% url 'blog:index' %}" ><i class="menu-item-icon fa fa-fw fa-home"></i><br>首页</a>
-                        </li>
-                        {% for mean in means %}
-                            <li class="menu-item">
-                                <a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa-fw {{ mean.icon }}"></i><br>{{ mean.title }}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if user.is_authenticated  %}
-                        <li class="menu-item mean-right notifications">
-                            {% notifications_unread as unread_count %}
-                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="notification_count">{{ unread_count }}</span>{% endif %}</a>
-                        </li>
-                        {% endif %}
-
-                        <li class="menu-item mean-right">
-                            <form action="{% url 'haystack_search' %}" class="search-form">
-                                <input type="search" name="q"  placeholder="搜索..." autocomplete="off"/>
-                                <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
-                            </form>
-                        </li>
-
-                    </ul>
-
-                </nav>
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">导航切换</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'blog:index' %}" >向东的笔记本</a>
             </div>
-        </header>
 
-        <!--页面主体区域-->
-        <main id="main" class="main">
-            <div class="all_content">
-                <div class="main-inner">
-                <!--页面右侧-->
-                <div class="content-wrap">
-                    <div id="content" class="content">
-                        {% block article %}
-                            <!--文章列表-->
-                            {% for post in posts%}
-                                <section id="posts" class="posts-expand">
-                                    <article class="post post-type-normal">
-                                        <div class="post-block posts-list" style="opacity: 1; display: block;">
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse" >
+                <ul class="nav navbar-nav">
+                    {% get_meanList as means %}
+                        <li><a href="{% url 'blog:index' %}" ><i class="menu-item-icon fa fa-fw fa-home"></i>首页</a></li>
 
-                                            <!--文章标题-->
-                                            <header class="post-header" style="opacity: 1; display: block; transform: translateY(0px);">
-{#                                                <a class="label label-important" href="{% url 'blog:category' post.category.id %}">{{ post.category }}<i class="label-arrow"></i></a>#}
-                                                <h2 class="post-title" itemprop="name headline"><a title="{{ post.title }}" href="{{ post.get_absolute_url }}" class="post-title-link" itemprop="url">{{ post.title | slice:":50" }}</a></h2>
-                                            </header>
+                    {% for mean in means %}
+                        <li><a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa-fw {{ mean.icon }}"></i>{{ mean.title }}</a></li>
+                    {% endfor %}
 
-                                            <!--文章摘要-->
-                                            <div class="post-excerpt">
-                                                  <p>{{ post.excerpt|slice:"1:"}}......</p>
-                                            </div>
+                    {% if user.is_authenticated  %}
+                        <li class="navbar-user">
+                            {% notifications_unread as unread_count %}
+                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
+                        </li>
 
-                                            <!--文章信息-->
-                                            <div class="post-meta">
-                                                <!--发表时间-->
-                                                <span class="post-time">
-                                                    日期：{{ post.created_time| date:"Y-m-d" }}
-                                                </span>
+                    {% else %}
+                        <li class="navbar-user">
+                            <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                        </li>
 
-                                                <!--文章标签-->
-                                                <span class="post-tags">
-                                                    <span class="busuanzi-value" id="busuanzi_value_page_pv">标签：
-                                                        {% for tag in post.tag.all %}
-                                                            <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
-                                                        {% endfor %}
-                                                    </span>
-                                                </span>
+                    {% endif %}
 
-                                                <!--阅读次数-->
-                                                <span class="post-views">
-                                                    <span class="busuanzi-value" id="busuanzi_value_page_pv">
-                                                        阅读({{ post.views }})
-                                                    </span>
-                                                </span>
+                    <li class="navbar-search">
+                        <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
+                            <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
+                            <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                    </li>
 
-                                                <!--评论次数-->
-                                                <span class="post-comments">
-                                                    <span class="busuanzi-value" id="busuanzi_value_page_pv">
-                                                        评论({% get_comment_count post %})
-                                                    </span>
-                                                </span>
-                                            </div>
 
-                                        </div>
-                                    </article>
-                                </section>
-                            {% endfor %}
 
-                            <!--分类盒子-->
-                            {% block articlebox %}
-                            {% endblock %}
-                        {% endblock %}
+                </ul>
+            </div>
+        </div>
+    </div>
 
-                        <!--分页部分-->
-                        {% if is_paginated %}
-                            <div class="pagination" style="opacity: 1;">
-                                <div>
-                                    <!--第一页-->
-                                    <a class="page-style" href="?page=1"><i class="fa fa-step-backward" aria-hidden="true"></i></a>
+    {% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-xs-12">
 
-                                    <!--上一页-->
-                                    {% if page_obj.has_previous %}
-                                    <a class="page-style" href="?page={{ page_obj.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a>
-                                    {% else %}
-                                    <span class="end-page-style page-style"><i class="fa fa-chevron-left" aria-hidden="true"></i></span>
-                                    {% endif %}
+                    {% block content_left %}{% endblock %}
 
-                                    <!--当前页/总页数-->
-                                    <span class="page-style" >{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    {% block content_paginate %}{% endblock %}
 
-                                    <!--下一页-->
-                                    {% if page_obj.has_next %}
-                                    <a class="page-style" href="?page={{ page_obj.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a>
-                                    {% else %}
-                                    <span class="end-page-style page-style"><i class="fa fa-chevron-right" aria-hidden="true"></i></span>
-                                    {% endif %}
+                    {% block content_comment %}{% endblock %}
 
-                                    <!--最后一页-->
-                                    <a class="page-style" href="?page={{ page_obj.paginator.num_pages }}"><i class="fa fa-step-forward" aria-hidden="true"></i></a>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
                 </div>
 
-                <!--左侧侧边栏-->
-                <div class = "content-siderbar">
+                <div class="col-md-3 col-xs-12">
+                    {% block content_right %}
+                    <div class = "content-sidebar">
+                        {% get_social_media as social_media %}
+                        {% block sidebar %}
+                            {% block toc_sidebar %}{% endblock %}
+    {#                                {% block social_sidebar %}#}
+    {#                                    <div class="sidebar">#}
+    {#                                        <div class="title"><h3>社交账号</h3>#}
+    {#                                            <div class="social">#}
+    {#                                                <a target="_blank" href="{{ social_media.github }}"><div class="social-media"><i class="fa fa-github fa-3x social-github" aria-hidden="true"></i></div></a>#}
+    {#                                                <a target="_blank" href="{{ social_media.wei_bo }}"><div class="social-media"><i class="fa fa-weibo fa-3x social-item" aria-hidden="true"></i></div></a>#}
+    {#                                                <a target="_blank" href="{{ social_media.zhi_hu }}"><div class="social-media"><i class="fa  fa-3x social-item" aria-hidden="true"><span class="social-font">知</span></i></div></a>#}
+    {#                                                <a target="_blank" href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin={{ social_media.qq }}"><div class="social-media"><i class="fa fa-qq fa-3x social-item" aria-hidden="true"></i></div></a>#}
+    {#                                            </div>#}
+    {#                                        </div>#}
+    {#                                </div>#}
+    {#                                {% endblock %}#}
 
-                    {% get_social_media as social_media %}
-                    {% block sidebar %}
-                        {% block toc_sidebar %}{% endblock %}
-                        {% block social_sidebar %}
-                            <div class="siderbar">
-                                <div class="title"><h3>社交账号</h3>
-                                    <div class="social">
-                                        <a target="_blank" href="{{ social_media.github }}"><div class="social-media"><i class="fa fa-github fa-3x social-github" aria-hidden="true"></i></div></a>
-                                        <a target="_blank" href="{{ social_media.wei_bo }}"><div class="social-media"><i class="fa fa-weibo fa-3x social-item" aria-hidden="true"></i></div></a>
-                                        <a target="_blank" href="{{ social_media.zhi_hu }}"><div class="social-media"><i class="fa  fa-3x social-item" aria-hidden="true"><span class="social-font">知</span></i></div></a>
-                                        <a target="_blank" href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin={{ social_media.qq }}"><div class="social-media"><i class="fa fa-qq fa-3x social-item" aria-hidden="true"></i></div></a>
-                                    </div>
-                                </div>
-                        </div>
-                        {% endblock %}
-
-                        {% block category_sidebar %}
-                            <div class="siderbar">
-                                <div class="widget git_tag">
+                            {% block category_sidebar %}
+                                <div class="sidebar">
                                     <div class="title"><h3>文章分类</h3></div>
                                         <div class="git_tags">
                                                 {% get_category as categories %}
@@ -241,50 +113,50 @@
                                                 {% endfor %}
                                         </div>
                                 </div>
-                            </div>
-                        {% endblock %}
+                            {% endblock %}
 
-                        {% block tag_sidebar %}
-                            <div class="siderbar" >
-                                <div class="widget git_tag">
-                                <div class="title"><h3>热门标签</h3></div>
-                                <div class="git_tags">
-                                    {% get_posts_tags as tags %}
-                                    {% for tag in tags %}
-                                        <a href="{{ tag.get_absolute_url  }}">{{ tag.name }}</a>
-                                    {% endfor %}
+                            {% block tag_sidebar %}
+                                <div class="sidebar" >
+                                    <div class="title"><h3>热门标签</h3></div>
+                                    <div class="git_tags">
+                                        {% get_posts_tags as tags %}
+                                        {% for tag in tags %}
+                                            <a href="{{ tag.get_absolute_url  }}">{{ tag.name }}</a>
+                                        {% endfor %}
+                                    </div>
                                 </div>
-                            </div>
-                            </div>
+                            {% endblock %}
                         {% endblock %}
-                    {% endblock %}
+                    </div>
+                {% endblock %}
                 </div>
-            </div>
-            </div>
-        </main>
+        </div>
+        </div>
+    {% endblock %}
 
-        <!--底部信息-->
-        <footer id="footer" class="footer">
-            <div class="footer-inner main-inner">
-                <div class="footer-col">
-                        <div class="content">
+    {% block bottom %}
+        <div class="footer">
+            <div class="container">
+                <div class="col-sm-4">
+                    <div class="content">
                         <h4 class="title">关于本站</h4>
                         {% get_site_info as site_info %}
                         <p>1. 本站于 {{ site_info.created_time | date:"Y-m-d" }} 开始上线</p>
                         <p>2. {{ site_info.development_info }}</p>
                         <p>3. {{ site_info.arrange_info }}</p>
-                        </div>
+                    </div>
                 </div>
-                <div class="footer-col">
-                        <div class="content">
+                <div class="col-sm-4">
+                    <div class="content">
                         <h4 class="title">联系站长</h4>
+                        {% get_social_media as social_media %}
                         <p>1. 微信号：{{ social_media.wechat }}</p>
                         <p>2. 公众号：{{ social_media.official_wechat }}</p>
                         {% get_custom_code as custom_code %}
                         <p>3. {% autoescape off %}{{ custom_code.statistics }}{% endautoescape %}</p>
-                        </div>
+                    </div>
                 </div>
-                <div class="footer-col">
+                <div class="col-sm-4">
                     <div class="content">
                         <h4 class="title">友情链接</h4>
                         {% get_friend_links as links %}
@@ -294,20 +166,15 @@
                     </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <span itemprop="copyrightYear">© 2019 {{ seo_info.title }}</span>
+
+            <div class="copyright">
+                {% get_seo_info as seo_info %}
+                <span >© 2019 {{ seo_info.title }}</span>
                 <span class="post-meta-divider">|</span>
                 <span><a href="http://www.miitbeian.gov.cn">{{ site_info.record_info}}</a></span>
             </div>
-        </footer>
-
-    </div>
-    <script src="{% static '/blog/js/index.js' %}"></script>
-    <script src="{% static '/blog/js/velocity.ui.min.js' %}"></script>
-    <script src="{% static '/blog/js/utils.js' %}"></script>
-    <script src="{% static '/blog/js/affix.js' %}"></script>
-    <script src="{% static '/blog/js/pisces.js' %}"></script>
-    <script src="{% static '/blog/js/bootstrap.js' %}"></script>
+        </div>
+    {% endblock %}
 
     {% block script_extends %} {% endblock %}
 
