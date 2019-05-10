@@ -14,7 +14,7 @@ before_install:
 install:
     - pip install -r requirements.txt
 script:
-    - cp configs.example.json configs.json
+#    - cp configs.example.json configs.json
     - python manage.py makemigrations
-    - python manage.py migrate
+#    - python manage.py migrate
 
