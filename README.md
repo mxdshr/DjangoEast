@@ -2,7 +2,7 @@
 
 本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
 
-[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)]
+[![Build Status](https://travis-ci.org/mxdshr/DjangoEast.svg?branch=master)](https://travis-ci.org/mxdshr/DjangoEast) ![GitHub release](https://img.shields.io/github/release/mxdshr/DjangoEast.svg)  [![Requirements Status](https://requires.io/github/mxdshr/DjangoEast/requirements.svg?branch=master)](https://requires.io/github/mxdshr/DjangoEast/requirements/?branch=master) ![GitHub](https://img.shields.io/github/license/mxdshr/DjangoEast.svg)
 
 ## 1. 主要功能
 - 支持访客留言功能
