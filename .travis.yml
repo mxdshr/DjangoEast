@@ -21,7 +21,7 @@ before_script:
 #    - python manage.py compress --force
 
 script:
-    - python manage.py test
+    - python runserver 127.0.0.1:8000
 
 #after_success:
 #    - coveralls
