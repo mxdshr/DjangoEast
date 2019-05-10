@@ -10,19 +10,19 @@ env:
 
 install:
   - pip install -r requirements.txt
-  - pip install python-coveralls
-  - pip install coverage codecov
+#  - pip install python-coveralls
+#  - pip install coverage codecov
 
 before_script:
     - mysql -e 'CREATE DATABASE `django_east` /*!40100 DEFAULT CHARACTER SET utf8 */;'
     - python manage.py makemigrations
     - python manage.py migrate
-    - python manage.py collectstatic --noinput
-    - python manage.py compress --force
+#    - python manage.py collectstatic --noinput
+#    - python manage.py compress --force
 
 script:
-    - coverage run manage.py test
+    - python manage.py test
 
-after_success:
-    - coveralls
-    - codecov
+#after_success:
+#    - coveralls
+#    - codecov
