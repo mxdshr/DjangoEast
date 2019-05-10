@@ -8,7 +8,7 @@ env:
     global:
      - TRAVIS=true
 before_install:
-    - mysql -e 'CREATE DATABASE IF NOT EXISTS django_east DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
+    - mysql -e 'CREATE DATABASE django_east CHARACTER SET utf8 DEFAULT COLLATE utf8_general_ci;'
 #    - mv configs.example.json configs.json
 # command to install dependencies
 install:
