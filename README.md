@@ -1,11 +1,6 @@
 # DjangoEast
-本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。是一个非常适合喜欢读书，喜欢看电影，喜欢做笔记，喜欢写代码的朋友使用的个人博客网站。欢迎有眼光的你下载下来使用一下~
-
-另外，我建了一个`Django`建站交流群，此群主要讨论与`Django`建站相关的问题。如果你在学习`Django`时或者在使用`DjangoEast`中遇到了任何问题，都可以在群里进行交流，我会给大家进行解答。我还会不定期在群里分享有关Django学习的资料，包括电子书，视频教程等。
-
-如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
-
-![](./static/display.png)
+本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
+[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)
 
 ## 1. 主要功能
 - 支持访客留言功能
@@ -55,7 +50,12 @@ python manage.py runserver 127.0.0.1:8000
 ```
 ## 3. 线上部署
 请参考：[(超详细)Django线上部署教程：腾讯云+Ubuntu+Django+Uwsgi](https://www.eastnotes.com/post/29)
-## 4.更新日志
+
+## 4.问题交流
+我建了一个`Django`建站交流群，此群主要讨论与`Django`建站相关的问题。如果你在学习`Django`时或者在使用`DjangoEast`中遇到了任何问题，都可以在群里进行交流，我会给大家进行解答。我还会不定期在群里分享有关Django学习的资料，包括电子书，视频教程等。
+
+如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
+## 5.更新日志
 ### V2.0
 2019.5.7，第二个版本，新增了很多功能，前端样式大改版，功能日渐完善，具体如下：
 - 新增我的书单、我的影单功能，读书和电影爱好者的福利
