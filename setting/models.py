@@ -17,7 +17,7 @@ class FriendLinks(models.Model):
 class Seo(models.Model):
     title = models.CharField("网站主名称", max_length=100, default='DjangoEast')
     sub_title = models.CharField("网站副名称", max_length=200, default='DjangoEast')
-    description = models.CharField("网站描述", max_length=300, default='DjangoEast')
+    description = models.CharField("网站描述", max_length=200, default='DjangoEast')
     keywords = models.CharField("关键字", max_length=200, default='DjangoEast')
 
     class Meta:

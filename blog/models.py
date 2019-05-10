@@ -9,7 +9,7 @@ from mdeditor.fields import MDTextField
 
 # 创建博文分类的表
 class Category(models.Model):
-	name = models.CharField(max_length=100,verbose_name='分类名称')
+	name = models.CharField(max_length=100, verbose_name='分类名称')
 
 	def __str__(self):
 		return self.name
@@ -25,7 +25,7 @@ class Category(models.Model):
 # 创建文章标签的表
 class Tag(models.Model):
 	# name是标签名的字段
-	name = models.CharField(max_length=100,verbose_name='标签名称')
+	name = models.CharField(max_length=100, verbose_name='标签名称')
 
 	def __str__(self):
 		return self.name
@@ -54,11 +54,11 @@ class Post(models.Model):
 		('n', '不置顶'),
 	)
 
-	title = models.CharField('标题', max_length=1000, unique=True)
+	title = models.CharField('标题', max_length=100, unique=True)
 	body = MDTextField('正文')
 	created_time = models.DateTimeField('创建时间', null=True, default=timezone.now)
 	modified_time = models.DateTimeField('修改时间', auto_now=True)
-	excerpt = models.CharField('摘要', max_length=300, blank=True, )
+	excerpt = models.CharField('摘要', max_length=200, blank=True, )
 	views = models.PositiveIntegerField('阅读量', default=0)
 	words = models.PositiveIntegerField('字数', default=0)
 	category = models.ForeignKey(Category, verbose_name='文章分类', on_delete=models.CASCADE)
@@ -94,7 +94,7 @@ class Post(models.Model):
 
 
 class BookCategory(models.Model):
-	name = models.CharField(max_length=100,verbose_name="分类名称")
+	name = models.CharField(max_length=100, verbose_name="分类名称")
 
 	def __str__(self):
 		return self.name
@@ -105,7 +105,7 @@ class BookCategory(models.Model):
 
 
 class BookTag(models.Model):
-	name = models.CharField(max_length=100,verbose_name="标签")
+	name = models.CharField(max_length=100, verbose_name="标签")
 
 	def __str__(self):
 		return self.name
@@ -119,19 +119,19 @@ class BookTag(models.Model):
 
 
 class Book(models.Model):
-	name = models.CharField(max_length=100,verbose_name="书名")
+	name = models.CharField(max_length=100, verbose_name="书名")
 	author = models.CharField(max_length=100, verbose_name="作者")
-	category = models.ForeignKey(BookCategory,on_delete=models.CASCADE,verbose_name="书籍分类")
-	tag = models.ManyToManyField(BookTag,verbose_name="本书标签")
-	cover = models.ImageField(upload_to='books',verbose_name="封面图",blank=True)
-	score = models.DecimalField(max_digits=2,decimal_places=1,verbose_name="豆瓣评分")
+	category = models.ForeignKey(BookCategory, on_delete=models.CASCADE,verbose_name="书籍分类")
+	tag = models.ManyToManyField(BookTag, verbose_name="本书标签")
+	cover = models.ImageField(upload_to='books', verbose_name="封面图",blank=True)
+	score = models.DecimalField(max_digits=2, decimal_places=1,verbose_name="豆瓣评分")
 	title = models.CharField(max_length=100, verbose_name="标题",blank=True)
 	detail = MDTextField(verbose_name="读书笔记", null=True,blank=True)
-	created_time = models.DateField(null=True,default = timezone.now,verbose_name="添加时间")
-	time_consuming = models.CharField(max_length=100,verbose_name="阅读初始时间")
-	views = models.PositiveIntegerField(default=0,verbose_name="阅读量")
-	words = models.PositiveIntegerField(default=0,verbose_name="字数")
-	excerpt = models.CharField(max_length=300, blank=True, verbose_name='摘要')
+	created_time = models.DateField(null=True, default=timezone.now,verbose_name="添加时间")
+	time_consuming = models.CharField(max_length=100, verbose_name="阅读初始时间")
+	views = models.PositiveIntegerField(default=0, verbose_name="阅读量")
+	words = models.PositiveIntegerField(default=0, verbose_name="字数")
+	excerpt = models.CharField(max_length=200, blank=True, verbose_name='摘要')
 
 	def get_absolute_url(self):
 		return reverse('blog:book_detail', kwargs={'pk': self.pk})
@@ -156,7 +156,7 @@ class Book(models.Model):
 
 
 class MovieCategory(models.Model):
-	name = models.CharField(max_length=100,verbose_name="电影分类")
+	name = models.CharField(max_length=100, verbose_name="电影分类")
 
 	def __str__(self):
 		return self.name
@@ -196,7 +196,7 @@ class Movie(models.Model):
 	detail = MDTextField(blank=True,null=True,verbose_name="观影后感")
 	views = models.PositiveIntegerField(default=0, verbose_name="阅读量")
 	words = models.PositiveIntegerField(default=0, verbose_name="字数")
-	excerpt = models.CharField(max_length=300, blank=True, verbose_name='摘要')
+	excerpt = models.CharField(max_length=200, blank=True, verbose_name='摘要')
 
 	def __str__(self):
 		return self.name
