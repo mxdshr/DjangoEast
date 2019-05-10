@@ -8,7 +8,7 @@ env:
     global:
      - TRAVIS=true
 before_install:
-    - mysql -e 'CREATE DATABASE `django_east`;'
+    - mysql -e 'CREATE DATABASE `django_east` DEFAULT CHARACTER SET utf8;'
 #    - mv configs.example.json configs.json
 # command to install dependencies
 install:
