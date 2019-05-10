@@ -112,10 +112,7 @@ def get_category_id(category_name):
     return category.id
 
 
-@register.simple_tag
-def get_seo_info():
-    seo_info = Seo.objects.get(id=1)
-    return seo_info
+
 
 
 @register.simple_tag
@@ -126,17 +123,23 @@ def get_friend_links():
 
 @register.simple_tag
 def get_custom_code():
-    custom_code = CustomCode.objects.get(id=1)
+    custom_code = CustomCode.objects.filter(id=1)
     return custom_code
 
 
 @register.simple_tag
 def get_site_info():
-    site_info = SiteInfo.objects.get(id=1)
+    site_info = SiteInfo.objects.filter(id=1)
     return site_info
 
 
 @register.simple_tag
 def get_social_media():
-    social_media = Social.objects.get(id=1)
+    social_media = Social.objects.filter(id=1)
     return social_media
+
+
+@register.simple_tag
+def get_seo_info():
+    seo_info = Seo.objects.filter(id=1)
+    return seo_info

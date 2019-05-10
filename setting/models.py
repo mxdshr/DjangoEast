@@ -4,8 +4,8 @@ import django.utils.timezone as timezone
 
 # 友情链接
 class FriendLinks(models.Model):
-    name = models.CharField(max_length=50,verbose_name="网站名称")
-    link = models.URLField(max_length=200,verbose_name="网站地址")
+    name = models.CharField('网站名称', max_length=50, default='向东的笔记本')
+    link = models.CharField('网站地址', max_length=200, default='https://www.eastnotes.com')
 
     class Meta:
         verbose_name = "友情链接"
@@ -15,10 +15,10 @@ class FriendLinks(models.Model):
 
 # SEO设置
 class Seo(models.Model):
-    title = models.CharField(max_length=100,verbose_name="网站主名称",null=True,blank=True)
-    sub_title = models.CharField(null=True,blank=True,max_length=200,verbose_name="网站副名称")
-    description = models.CharField(max_length=300,verbose_name="网站描述")
-    keywords = models.CharField(max_length=200,verbose_name="关键字")
+    title = models.CharField("网站主名称", max_length=100, default='DjangoEast')
+    sub_title = models.CharField("网站副名称", max_length=200, default='DjangoEast')
+    description = models.CharField("网站描述", max_length=300, default='DjangoEast')
+    keywords = models.CharField("关键字", max_length=200, default='DjangoEast')
 
     class Meta:
         verbose_name = "SEO设置"
@@ -27,7 +27,7 @@ class Seo(models.Model):
 
 # 自定义代码
 class CustomCode(models.Model):
-    statistics = models.TextField(null=True,blank=True,verbose_name="网站统计代码")
+    statistics = models.TextField("网站统计代码", default='统计代码')
 
     class Meta:
         verbose_name = "自定义代码"
@@ -36,10 +36,10 @@ class CustomCode(models.Model):
 
 # 站点信息
 class SiteInfo(models.Model):
-    created_time = models.DateField(null=True,blank=True,default = timezone.now,verbose_name="建站时间")
-    record_info = models.CharField(null=True,blank=True,max_length=100,verbose_name="备案信息")
-    development_info = models.CharField(null=True,blank=True,max_length=100,verbose_name="开发信息")
-    arrange_info = models.CharField(null=True,blank=True,max_length=100,verbose_name="部署信息")
+    created_time = models.DateField("建站时间", default=timezone.now)
+    record_info = models.CharField("备案信息", max_length=100, default='备案号')
+    development_info = models.CharField("开发信息", max_length=100, default='开发信息')
+    arrange_info = models.CharField("部署信息", max_length=100, default='部署信息')
 
     class Meta:
         verbose_name = "站点信息"
@@ -48,12 +48,12 @@ class SiteInfo(models.Model):
 
 # 社交账号
 class Social(models.Model):
-    github = models.URLField(null=True,blank=True,max_length=200,verbose_name="Github地址")
-    wei_bo = models.URLField(null=True,blank=True,max_length=200,verbose_name="微博地址")
-    zhi_hu = models.URLField(null=True,blank=True,max_length=200,verbose_name="知乎地址")
-    qq = models.CharField(null=True,blank=True,max_length=20,verbose_name="QQ号码")
-    wechat = models.CharField(null=True,blank=True,max_length=50,verbose_name="微信")
-    official_wechat = models.CharField(null=True,blank=True,max_length=50,verbose_name="微信公众号")
+    github = models.URLField("Github地址", max_length=200, default='https://github.com/mxdshr/DjangoEast')
+    wei_bo = models.URLField("微博地址", max_length=200, default='https://weibo.com/')
+    zhi_hu = models.URLField("知乎地址", max_length=200, default='https://www.zhihu.com/people/sylax8/')
+    qq = models.CharField("QQ号码", max_length=20, default='783342105')
+    wechat = models.CharField("微信",max_length=50,default='reborn0502')
+    official_wechat = models.CharField("微信公众号", max_length=50, default='程序员向东')
 
     class Meta:
         verbose_name = "社交账号"
