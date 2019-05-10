@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import markdown
 from .models import *
 from django.db.models import Count

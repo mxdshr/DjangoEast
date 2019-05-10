@@ -14,7 +14,7 @@ install:
 #  - pip install coverage codecov
 
 before_script:
-    - mysql -e 'CREATE DATABASE `django_east` /*!40100 DEFAULT CHARACTER SET utf8 */;'
+    - mysql -e 'CREATE DATABASE `django_east` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
     - python manage.py makemigrations
     - python manage.py migrate
 #    - python manage.py collectstatic --noinput
