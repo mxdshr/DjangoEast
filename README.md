@@ -1,6 +1,8 @@
 # DjangoEast
+
 本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
-[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)
+
+[![Build Status](https://travis-ci.org/liangliangyy/DjangoBlog.svg?branch=master)]
 
 ## 1. 主要功能
 - 支持访客留言功能
