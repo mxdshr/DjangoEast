@@ -19,7 +19,6 @@
     <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
     <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
     {% block meta %}{% endblock %}
-
 </head>
 
 <body lang="zh-CN">
@@ -43,30 +42,29 @@
                     {% for mean in means %}
                         <li><a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa-fw {{ mean.icon }}"></i>{{ mean.title }}</a></li>
                     {% endfor %}
-
-                    {% if user.is_authenticated  %}
-                        <li class="navbar-user">
-                            {% notifications_unread as unread_count %}
-                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
-                        </li>
-
-                    {% else %}
-                        <li class="navbar-user">
-                            <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
-                        </li>
-
-                    {% endif %}
-
-                    <li class="navbar-search">
-                        <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
-                            <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
-                            <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                        </form>
-                    </li>
-
-
-
                 </ul>
+
+
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated  %}
+                            <li class="">
+                                {% notifications_unread as unread_count %}
+                                <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
+                            </li>
+
+                        {% else %}
+                            <li class="">
+                                <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录/注册</a>
+                            </li>
+                        {% endif %}
+                        <li class="navbar-search ">
+                            <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
+                                <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
+                                <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                            </form>
+                        </li>
+                    </ul>
+
             </div>
         </div>
     </div>

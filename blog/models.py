@@ -6,24 +6,27 @@ from django.utils.html import strip_tags
 import django.utils.timezone as timezone
 from mdeditor.fields import MDTextField
 
+
 # 创建博文分类的表
 class Category(models.Model):
 	name = models.CharField(max_length=100,verbose_name='分类名称')
 
 	def __str__(self):
 		return self.name
+
 	class Meta:
 		verbose_name="分类目录"
 		verbose_name_plural = verbose_name
+
 	def get_absolute_url(self):
 		return reverse('blog:category', kwargs={'pk': self.pk})
-
 
 
 # 创建文章标签的表
 class Tag(models.Model):
 	# name是标签名的字段
 	name = models.CharField(max_length=100,verbose_name='标签名称')
+
 	def __str__(self):
 		return self.name
 
@@ -38,16 +41,31 @@ class Tag(models.Model):
 # 创建文章的类
 class Post(models.Model):
 
-	title = models.CharField(max_length=1000,verbose_name='标题')
-	body = MDTextField(verbose_name='正文')
-	created_time = models.DateTimeField(null=True,verbose_name='创建时间',default = timezone.now)
-	modified_time = models.DateTimeField(verbose_name='修改时间',auto_now = True)
-	excerpt = models.CharField(max_length=300,blank=True,verbose_name='摘要')
-	views = models.PositiveIntegerField(default=0)
-	words = models.PositiveIntegerField(default=0)
-	category = models.ForeignKey(Category,verbose_name='文章分类',on_delete=models.CASCADE)
-	tag = models.ManyToManyField(Tag,verbose_name='标签类型')
-	author = models.ForeignKey(User,verbose_name='作者',on_delete=models.CASCADE,default="reborn")
+	# 发表状态
+	PUBLISH_STATUS = (
+		('p', '已发表'),
+		('d', '草稿箱'),
+		('r', '回收站'),
+	)
+
+	# 是否置顶
+	STICK_STATUS = (
+		('y', '置顶'),
+		('n', '不置顶'),
+	)
+
+	title = models.CharField('标题', max_length=1000, unique=True)
+	body = MDTextField('正文')
+	created_time = models.DateTimeField('创建时间', null=True, default=timezone.now)
+	modified_time = models.DateTimeField('修改时间', auto_now=True)
+	excerpt = models.CharField('摘要', max_length=300, blank=True, )
+	views = models.PositiveIntegerField('阅读量', default=0)
+	words = models.PositiveIntegerField('字数', default=0)
+	category = models.ForeignKey(Category, verbose_name='文章分类', on_delete=models.CASCADE)
+	tag = models.ManyToManyField(Tag, verbose_name='标签类型')
+	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, default="reborn")
+	status = models.CharField('文章状态', max_length=1, choices=PUBLISH_STATUS, default='p')
+	stick = models.CharField('是否置顶', max_length=1, choices=STICK_STATUS, default='n')
 
 	def get_absolute_url(self):
 		return reverse('blog:article', kwargs={'pk': self.pk})
@@ -74,6 +92,7 @@ class Post(models.Model):
 		verbose_name_plural = verbose_name
 		ordering= ['-pk']
 
+
 class BookCategory(models.Model):
 	name = models.CharField(max_length=100,verbose_name="分类名称")
 
@@ -83,6 +102,7 @@ class BookCategory(models.Model):
 	class Meta:
 		verbose_name = "图书分类"
 		verbose_name_plural = verbose_name
+
 
 class BookTag(models.Model):
 	name = models.CharField(max_length=100,verbose_name="标签")
@@ -112,7 +132,6 @@ class Book(models.Model):
 	views = models.PositiveIntegerField(default=0,verbose_name="阅读量")
 	words = models.PositiveIntegerField(default=0,verbose_name="字数")
 	excerpt = models.CharField(max_length=300, blank=True, verbose_name='摘要')
-
 
 	def get_absolute_url(self):
 		return reverse('blog:book_detail', kwargs={'pk': self.pk})
@@ -146,6 +165,7 @@ class MovieCategory(models.Model):
 		verbose_name="电影分类"
 		verbose_name_plural = verbose_name
 
+
 class MovieTag(models.Model):
 	name = models.CharField(max_length=100,verbose_name="标签名称",blank=True)
 
@@ -158,6 +178,7 @@ class MovieTag(models.Model):
 	class Meta:
 		verbose_name="电影标签"
 		verbose_name_plural=verbose_name
+
 
 class Movie(models.Model):
 	name = models.CharField(max_length=100,verbose_name="电影名称")
@@ -198,10 +219,10 @@ class Movie(models.Model):
 		verbose_name="我的影单"
 		verbose_name_plural = verbose_name
 
+
 class Messages(models.Model):
 	name = models.CharField(max_length=100,verbose_name="给我留言")
 	admin = models.ForeignKey(User,verbose_name='站长',on_delete=models.CASCADE,blank=True,null=True)
-
 
 	def get_absolute_url(self):
 		return reverse('blog:messages')
@@ -214,7 +235,6 @@ class Messages(models.Model):
 		verbose_name_plural = verbose_name
 
 
-
 class MeanList(models.Model):
 	title = models.CharField(max_length=100,verbose_name="菜单名称")
 	link = models.CharField(max_length=100,verbose_name="菜单链接",blank=True,null=True,)
@@ -223,7 +243,6 @@ class MeanList(models.Model):
 	class Meta:
 		verbose_name = "菜单栏"
 		verbose_name_plural = verbose_name
-
 
 
 class Courses(models.Model):

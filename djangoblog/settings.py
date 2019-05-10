@@ -139,10 +139,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_east',
-        'USER':'django_east',
-        'PASSWORD':'123456',
-        'PORT':'3306',
-        'HOST':'localhost',
+        'USER': 'root',
+        'PASSWORD': '',
+        'PORT': '3306',
+        'HOST': 'localhost',
     }
 }
 
@@ -196,3 +196,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DJANGO_NOTIFICATIONS_CONFIG = {
     'USE_JSONFIELD': True
 }
+SILENCED_SYSTEM_CHECKS = ['mysql.E001']

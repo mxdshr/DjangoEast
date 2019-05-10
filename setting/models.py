@@ -1,6 +1,7 @@
 from django.db import models
 import django.utils.timezone as timezone
 
+
 # 友情链接
 class FriendLinks(models.Model):
     name = models.CharField(max_length=50,verbose_name="网站名称")
@@ -10,6 +11,7 @@ class FriendLinks(models.Model):
         verbose_name = "友情链接"
         verbose_name_plural = verbose_name
         ordering = ['-pk']
+
 
 # SEO设置
 class Seo(models.Model):
@@ -22,14 +24,15 @@ class Seo(models.Model):
         verbose_name = "SEO设置"
         verbose_name_plural = verbose_name
 
+
 # 自定义代码
 class CustomCode(models.Model):
     statistics = models.TextField(null=True,blank=True,verbose_name="网站统计代码")
 
-
     class Meta:
         verbose_name = "自定义代码"
         verbose_name_plural = verbose_name
+
 
 # 站点信息
 class SiteInfo(models.Model):
@@ -42,6 +45,7 @@ class SiteInfo(models.Model):
         verbose_name = "站点信息"
         verbose_name_plural = verbose_name
 
+
 # 社交账号
 class Social(models.Model):
     github = models.URLField(null=True,blank=True,max_length=200,verbose_name="Github地址")
@@ -50,7 +54,6 @@ class Social(models.Model):
     qq = models.CharField(null=True,blank=True,max_length=20,verbose_name="QQ号码")
     wechat = models.CharField(null=True,blank=True,max_length=50,verbose_name="微信")
     official_wechat = models.CharField(null=True,blank=True,max_length=50,verbose_name="微信公众号")
-
 
     class Meta:
         verbose_name = "社交账号"

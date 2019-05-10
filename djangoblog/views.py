@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from djangoblog.form import LoginForm,RegForm
 
+
 # 显示登录页面、进行登录操作
 def login(request):
     # 此处只有登录的操作，验证的部分在forms.py完成

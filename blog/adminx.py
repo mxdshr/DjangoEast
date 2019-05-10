@@ -1,16 +1,17 @@
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import xadmin
 from .models import *
 from xadmin import views
 
+
 # 此类可以定义admin后台显示的字段，比如文章列表显示标题，创建时间，
 class PostAdmin(object):
     # 展示的字段
-    list_display = ['id','title','created_time','category']
+    list_display = ['id', 'title', 'created_time', 'category', 'status']
     # 按文章名进行搜索
     search_fields = ['title']
     # 筛选
-    list_filter = ['id','title','created_time','category']
+    list_filter = ['id', 'title', 'created_time', 'category', 'status']
     # 修改图标
     model_icon = 'fa fa-bell'
     # 修改默认排序
@@ -26,15 +27,18 @@ class PostAdmin(object):
 
     # style_fields = {'body':'ueditor'}
 
+
 class CategoryAdmin(object):
     list_display = ['id','name']
     search_fields = ['name']
     model_icon = 'fa fa-briefcase'
 
+
 class TagAdmin(object):
     list_display = ['id', 'name']
     search_fields = ['name']
     model_icon = 'fa fa-tags'
+
 
 # 图书分类
 class BookCategoryAdmin(object):
@@ -42,11 +46,13 @@ class BookCategoryAdmin(object):
     search_fields = ['name']
     model_icon = 'fa fa-book'
 
+
 # 图书
 class BookAdmin(object):
     list_display = ['id', 'name']
     search_fields = ['name']
     model_icon = 'fa fa-book'
+
 
 # 图书标签
 class BookTagAdmin(object):
@@ -54,11 +60,13 @@ class BookTagAdmin(object):
     search_fields = ['name']
     model_icon = 'fa fa-book'
 
+
 # 电影分类
 class MovieCategoryAdmin(object):
     list_display = ['id', 'name']
     search_fields = ['name']
     model_icon = 'fa fa-film'
+
 
 # 电影
 class MovieAdmin(object):
@@ -66,20 +74,24 @@ class MovieAdmin(object):
     search_fields = ['name']
     model_icon = 'fa fa-film'
 
+
 # 电影标签
 class MovieTagAdmin(object):
     list_display = ['id', 'name']
     search_fields = ['name']
     model_icon = 'fa fa-film'
 
+
 class MeanListAdmin(object):
     list_display = ['id','title','link','icon']
     search_field = ['title']
     model_icon = 'fa fa-list'
 
+
 class CoursesAdmin(object):
     list_display = ['id','title','views','category','created_time','comments','numbers']
     model_icon = 'fa fa-gift'
+
 
 class MessagesAdmin(object):
     list_display = ['id', 'name']
@@ -103,11 +115,13 @@ xadmin.site.register(MeanList,MeanListAdmin)
 xadmin.site.register(Courses,CoursesAdmin)
 xadmin.site.register(Messages,MessagesAdmin)
 
+
 # 修改xadmin的基础配置
 class BaseSetting(object):
     # 允许使用主题
     enable_themes = True
     use_bootswatch = True
+
 
 # 修改xadmin的全局配置
 class GlobalSetting(object):

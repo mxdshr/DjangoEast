@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import auth
 from django.contrib.auth.models import User
 
+
 # 登录表单
 class LoginForm(forms.Form):
     username = forms.CharField(label='fa fa-user',
@@ -21,6 +22,7 @@ class LoginForm(forms.Form):
             self.cleaned_data['user'] = user
 
         return self.cleaned_data
+
 
 # 注册表单
 class RegForm(forms.Form):
