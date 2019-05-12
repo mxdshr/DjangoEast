@@ -17,7 +17,7 @@
                                 <div class="card-category">
                                     <a href="">{{ movie.category }}</a>
                                 </div>
-                                {% if movie.detail != "" %}
+                                {% if movie.pid != "" %}
                                     <a href="{{ movie.get_absolute_url }}" target="_blank"><img alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}"></a>
                                 {% else %}
                                     <img alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}">

@@ -56,13 +56,13 @@ class Post(models.Model):
 
 	title = models.CharField('标题', max_length=100, unique=True)
 	body = MDTextField('正文')
-	created_time = models.DateTimeField('创建时间', null=True, default=timezone.now)
+	created_time = models.DateTimeField('创建时间', default=timezone.now)
 	modified_time = models.DateTimeField('修改时间', auto_now=True)
 	excerpt = models.CharField('摘要', max_length=200, blank=True, )
 	views = models.PositiveIntegerField('阅读量', default=0)
 	words = models.PositiveIntegerField('字数', default=0)
 	category = models.ForeignKey(Category, verbose_name='文章分类', on_delete=models.CASCADE)
-	tag = models.ManyToManyField(Tag, verbose_name='标签类型')
+	tag = models.ManyToManyField(Tag, verbose_name='标签类型', blank=True)
 	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, default="reborn")
 	status = models.CharField('文章状态', max_length=1, choices=PUBLISH_STATUS, default='p')
 	stick = models.CharField('是否置顶', max_length=1, choices=STICK_STATUS, default='n')
@@ -88,9 +88,9 @@ class Post(models.Model):
 		super(Post, self).save(*args, **kwargs) # 调用父类的 save 方法将数据保存到数据库中
 
 	class Meta:
-		verbose_name="文章列表"
+		verbose_name = "文章列表"
 		verbose_name_plural = verbose_name
-		ordering= ['-pk']
+		ordering = ['-created_time']
 
 
 class BookCategory(models.Model):
@@ -119,39 +119,24 @@ class BookTag(models.Model):
 
 
 class Book(models.Model):
-	name = models.CharField(max_length=100, verbose_name="书名")
-	author = models.CharField(max_length=100, verbose_name="作者")
-	category = models.ForeignKey(BookCategory, on_delete=models.CASCADE,verbose_name="书籍分类")
+	name = models.CharField("书名", max_length=100)
+	author = models.CharField("作者", max_length=100)
+	category = models.ForeignKey(BookCategory, on_delete=models.CASCADE, verbose_name="书籍分类")
 	tag = models.ManyToManyField(BookTag, verbose_name="本书标签")
-	cover = models.ImageField(upload_to='books', verbose_name="封面图",blank=True)
-	score = models.DecimalField(max_digits=2, decimal_places=1,verbose_name="豆瓣评分")
-	title = models.CharField(max_length=100, verbose_name="标题",blank=True)
-	detail = MDTextField(verbose_name="读书笔记", null=True,blank=True)
-	created_time = models.DateField(null=True, default=timezone.now,verbose_name="添加时间")
-	time_consuming = models.CharField(max_length=100, verbose_name="阅读初始时间")
-	views = models.PositiveIntegerField(default=0, verbose_name="阅读量")
-	words = models.PositiveIntegerField(default=0, verbose_name="字数")
-	excerpt = models.CharField(max_length=200, blank=True, verbose_name='摘要')
-
-	def get_absolute_url(self):
-		return reverse('blog:book_detail', kwargs={'pk': self.pk})
+	cover = models.ImageField("封面图", upload_to='books', blank=True)
+	score = models.DecimalField("豆瓣评分", max_digits=2, decimal_places=1)
+	created_time = models.DateField("添加时间", null=True, default=timezone.now)
+	time_consuming = models.CharField("阅读初始时间", max_length=100)
+	pid = models.CharField("文章ID", max_length=100, blank=True)
 
 	def __str__(self):
 		return self.name
 
-	# 阅读量增加1
-	def increase_views(self):
-		self.views += 1
-		self.save(update_fields=['views'])
-
-	def save(self, *args, **kwargs):
-		if not self.excerpt:
-			self.excerpt = strip_tags(self.detail).replace("&nbsp;","").replace("#","")[:150] #strip_tags是去除html标签
-		self.words = len(strip_tags(self.detail).replace(" ","").replace('\n',""))	# 统计文章字数
-		super(Book, self).save(*args, **kwargs) # 调用父类的 save 方法将数据保存到数据库中
+	def get_absolute_url(self):
+		return reverse('blog:article', kwargs={'pk': self.pid})
 
 	class Meta:
-		verbose_name="我的书单"
+		verbose_name = "我的书单"
 		verbose_name_plural = verbose_name
 
 
@@ -173,7 +158,7 @@ class MovieTag(models.Model):
 		return self.name
 
 	def get_absolute_url(self):
-		return reverse('blog:movie_list',kwargs={'pk':self.pk})
+		return reverse('blog:movie_list', kwargs={'pk': self.pk})
 
 	class Meta:
 		verbose_name="电影标签"
@@ -181,42 +166,27 @@ class MovieTag(models.Model):
 
 
 class Movie(models.Model):
-	name = models.CharField(max_length=100,verbose_name="电影名称")
-	director = models.CharField(max_length=100,verbose_name="导演")
-	actor = models.CharField(max_length=100,verbose_name="主演")
-	category = models.ForeignKey(MovieCategory,on_delete=models.CASCADE,verbose_name="电影分类",)
-	tag = models.ManyToManyField(MovieTag,verbose_name="电影标签")
-	cover = models.ImageField(upload_to='movies',verbose_name="上传封面",blank=True)
-	score = models.DecimalField(max_digits=2,decimal_places=1,verbose_name="豆瓣评分")
-	release_time = models.DateField(verbose_name="上映时间")
-	created_time = models.DateField(default=timezone.now,verbose_name="添加时间")
-	length_time = models.PositiveIntegerField(default=0,verbose_name="电影时长")
-	watch_time = models.DateField(default=timezone.now,verbose_name="观看时间")
-	title = models.CharField(max_length=100,verbose_name="标题",blank=True)
-	detail = MDTextField(blank=True,null=True,verbose_name="观影后感")
-	views = models.PositiveIntegerField(default=0, verbose_name="阅读量")
-	words = models.PositiveIntegerField(default=0, verbose_name="字数")
-	excerpt = models.CharField(max_length=200, blank=True, verbose_name='摘要')
+	name = models.CharField("电影名称", max_length=100)
+	director = models.CharField("导演", max_length=100)
+	actor = models.CharField("主演", max_length=100)
+	category = models.ForeignKey(MovieCategory, on_delete=models.CASCADE, verbose_name="电影分类")
+	tag = models.ManyToManyField(MovieTag, verbose_name="电影标签")
+	cover = models.ImageField("上传封面", upload_to='movies', blank=True)
+	score = models.DecimalField("豆瓣评分", max_digits=2, decimal_places=1)
+	release_time = models.DateField("上映时间")
+	created_time = models.DateField("添加时间", default=timezone.now)
+	length_time = models.PositiveIntegerField("电影时长", default=0)
+	watch_time = models.DateField("观看时间", default=timezone.now)
+	pid = models.CharField("文章ID", max_length=100, blank=True)
 
 	def __str__(self):
 		return self.name
 
-	# 阅读量增加1
-	def increase_views(self):
-		self.views += 1
-		self.save(update_fields=['views'])
-
-	def save(self, *args, **kwargs):
-		if not self.excerpt:
-			self.excerpt = strip_tags(self.detail).replace("&nbsp;","").replace("#","")[:150] #strip_tags是去除html标签
-		self.words = len(strip_tags(self.detail).replace(" ","").replace('\n',""))	# 统计文章字数
-		super(Movie, self).save(*args, **kwargs) # 调用父类的 save 方法将数据保存到数据库中
-
 	def get_absolute_url(self):
-		return reverse('blog:movie_detail', kwargs={'pk': self.pk})
+		return reverse('blog:article', kwargs={'pk': self.pid})
 
 	class Meta:
-		verbose_name="我的影单"
+		verbose_name = "我的影单"
 		verbose_name_plural = verbose_name
 
 
@@ -236,9 +206,9 @@ class Messages(models.Model):
 
 
 class MeanList(models.Model):
-	title = models.CharField(max_length=100,verbose_name="菜单名称")
-	link = models.CharField(max_length=100,verbose_name="菜单链接",blank=True,null=True,)
-	icon = models.CharField(max_length=100,verbose_name="菜单图标",blank=True,null=True,)
+	title = models.CharField("菜单名称", max_length=100)
+	link = models.CharField("菜单链接", max_length=100, blank=True,null=True,)
+	icon = models.CharField("菜单图标", max_length=100, blank=True,null=True,)
 
 	class Meta:
 		verbose_name = "菜单栏"

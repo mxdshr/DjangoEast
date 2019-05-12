@@ -140,13 +140,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'django_east',
         'USER': 'root',
-        'PASSWORD': '',
+        'PASSWORD': 'asd100',
         'PORT': '3306',
         'HOST': '127.0.0.1',
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            'charset': 'utf8',
-        },
     }
 }
 

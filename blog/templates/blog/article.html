@@ -199,8 +199,10 @@
     </script>
 {% endblock %}
 
+
 {% block toc_sidebar %}
-    <div class="sidebar" >
+    {% ifnotequal '' post.toc %}
+        <div class="sidebar" >
             <div class="title">
                 <h3>文章目录</h3>
             </div>
@@ -209,5 +211,9 @@
                 {{ post.toc }}
                 {% endautoescape %}
             </div>
-    </div>
+        </div>
+    {% endifnotequal %}
 {% endblock %}
+
+
+

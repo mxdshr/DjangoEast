@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 import markdown
 from .models import *
 from django.db.models import Count
 from django.views.generic import ListView
 from django.contrib.auth.models import User
+from django.utils.html import strip_tags
 from django.shortcuts import render,get_object_or_404
 
 
@@ -27,7 +27,11 @@ def article(request, pk):
         'markdown.extensions.toc',
     ])
     post.body = md.convert(post.body)
-    post.toc = md.toc
+    if strip_tags(md.toc).strip() == '':
+        post.toc = ''
+    else:
+       post.toc = md.toc
+
     # 获取相关文章
     relative_posts = Post.objects.filter(category_id=post.category_id, status='p').exclude(pk=pk).order_by('?')[:4]
 
@@ -119,20 +123,6 @@ class BookListView(ListView):
         return context
 
 
-def book_detail(request,pk):
-    book = get_object_or_404(Book,pk=pk)
-    md = markdown.Markdown(extensions=[
-        'markdown.extensions.extra',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.toc',
-    ])
-    book.detail = md.convert(book.detail)
-    book.toc = md.toc
-    book.increase_views()  # 阅读量加1
-    tags = BookTag.objects.annotate(posts_count = Count('book')).order_by('-posts_count')
-    return render(request, 'book/book_detail.html', {'book':book, 'tags':tags, })
-
-
 class MoviesView(ListView):
     template_name = 'movie/movies.html'
     context_object_name = 'movies'
@@ -155,21 +145,6 @@ class MovieListView(ListView):
         context = super(MovieListView, self).get_context_data(**kwargs)
         context['tag_name'] = MovieTag.objects.get(pk = self.kwargs.get('pk'))
         return context
-
-
-def movie_detail(request,pk):
-    movie = get_object_or_404(Movie,pk=pk)
-    md = markdown.Markdown(extensions=[
-        'markdown.extensions.extra',
-        'markdown.extensions.codehilite',
-        'markdown.extensions.toc',
-    ])
-    movie.detail = md.convert(movie.detail)
-    movie.toc = md.toc
-    movie.increase_views()  # 阅读量加1
-
-    tags = MovieTag.objects.annotate(movies_count = Count('movie')).order_by('-movies_count')
-    return render(request, 'movie/movie_detail.html', {'movie':movie, 'tags':tags, })
 
 
 def messages(request):

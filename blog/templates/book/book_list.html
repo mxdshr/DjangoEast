@@ -16,7 +16,7 @@
                             <div class="card-category">
                             <a href="">{{ book.category }}</a>
                             </div>
-                            {% if book.detail != "" %}
+                            {% if book.pid != "" %}
                                 <a href="{{ book.get_absolute_url }}"><img alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}"></a>
                             {% else %}
                                 <img alt="{{ book.name }}" src="{% url 'blog:index' %}media/{{ book.cover }}">
