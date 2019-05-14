@@ -4,10 +4,9 @@ services:
     - mysql
 python:
     - "3.6"
-env:
     global:
      - TRAVIS=true
-     - DJANGO_SETTINGS_MODULE="djangoblog.settings"
+     - DJANGO_SETTINGS_MODULE="travis_settings.py"
 
 install:
   - pip install -r requirements.txt
