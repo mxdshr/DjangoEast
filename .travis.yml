@@ -6,7 +6,7 @@ python:
     - "3.6"
     global:
      - TRAVIS=true
-     - DJANGO_SETTINGS_MODULE="djangoblog.settings.py"
+     - DJANGO_SETTINGS_MODULE="djangoblog.settings"
 
 install:
   - pip install -r requirements.txt
