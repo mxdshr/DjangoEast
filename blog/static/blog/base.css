@@ -5,7 +5,9 @@ body{
     color: #555!important;
     line-height: 2em!important;
 }
-
+/*.navbar-default{*/
+    /*background-color: #3b5998!important;*/
+/*}*/
 body h1{
     font-size: 22px!important;
 }
@@ -72,6 +74,9 @@ a:hover{
 }
 
 .navbar-default .navbar-nav>li>a {
+    color: #444!important;
+}
+.navbar-default .navbar-brand {
     color: #444!important;
 }
 
@@ -262,6 +267,43 @@ a:hover{
 .article-body h3 {
     font-size: 1.3em;
     border-bottom: 1px solid #eee;
+}
+
+/*文章表格样式*/
+.article-body table{
+    border-collapse: collapse;
+    display: table;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 24px;
+    background-color: transparent;
+    border-spacing: 0;
+}
+
+
+.article-body table tr td, .article-body table tr th {
+    font-size: 14px;
+    color: #4f4f4f;
+    line-height: 22px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    word-break: normal!important;
+    text-align: center;
+}
+
+.article-body table tr th {
+    font-weight: 700;
+    background-color: #eff3f5;
+}
+
+.article-body table tr:nth-child(2n) {
+    background-color: #f7f7f7;
+}
+
+.article-body table tr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    background-color: #fff;
 }
 
 .article .article-meta>span {
@@ -498,9 +540,10 @@ div .reply_body{
 .footer{
     font-size: 14px;
     color: #ccc;
-    background: #303438;
+    background: #23262b;
     margin-top: 10px;
     line-height: 24px;
+    position: relative;
 }
 
 .footer .title{
@@ -508,7 +551,7 @@ div .reply_body{
     margin-left: 0;
     margin-right: 100px!important;
     height: 30px;
-    border-bottom: 1px solid #b9b9b9;
+    /*border-bottom: 1px solid #b9b9b9;*/
 }
 
 .footer a{
@@ -519,8 +562,9 @@ div .reply_body{
     text-align: center;
     padding: 0.5em 0;
     margin-top: 1.5em;
-    background: black;
+    /*background: black;*/
     color: #ccc;
+    border-top: 1px solid #30333b;
 }
 .post-meta-divider {
   margin: 0 0.5em;
@@ -633,6 +677,7 @@ div .reply_body{
 .article_box .news ul li a:hover {
     color: #d23f31;
 }
+
 
 
 /*图书电影列表页*/
@@ -928,4 +973,46 @@ div .reply_body{
 
 .messages{
     padding: 15px;
+}
+
+/*以下是课程页面的样式*/
+.course-container{
+    width: 100% !important;
+}
+.course-articles {
+   overflow: hidden;
+   text-align: left;
+   margin-left: -20px;
+}
+.course-articles ul {
+    width: 1000px;
+}
+
+.course-articles li{
+  list-style-type: none !important;
+}
+.course-articles li a {
+  color: #666;
+}
+.course-navbar{
+    background-color: #e7453c;
+    margin-top: -14px;
+}
+
+.course-collapse{
+    padding: 0!important;
+    height: 600px!important;
+    overflow: scroll!important;
+    position: fixed!important;
+    width: 320px!important;
+    /*z-index: -10!important;*/
+    /*background-color: #fff;*/
+}
+
+.course-sidebar{
+    position: fixed;
+    width: 330px;
+    z-index: 0;
+    height: 630px;
+    overflow: auto;
 }

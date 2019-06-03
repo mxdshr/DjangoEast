@@ -43,7 +43,8 @@ class Post(models.Model):
 
 	# 发表状态
 	PUBLISH_STATUS = (
-		('p', '已发表'),
+		('p', '文章页'),
+		('c', '教程页'),
 		('d', '草稿箱'),
 		('r', '回收站'),
 	)
@@ -83,9 +84,9 @@ class Post(models.Model):
 
 	def save(self, *args, **kwargs):
 		if not self.excerpt:
-			self.excerpt = strip_tags(self.body).replace("&nbsp;","").replace("#","")[:150] #strip_tags是去除html标签
-		self.words = len(strip_tags(self.body).replace(" ","").replace('\n',""))	# 统计文章字数
-		super(Post, self).save(*args, **kwargs) # 调用父类的 save 方法将数据保存到数据库中
+			self.excerpt = strip_tags(self.body).replace("&nbsp;", "").replace("#", "")[:150]
+		self.words = len(strip_tags(self.body).replace(" ", "").replace('\n', ""))
+		super(Post, self).save(*args, **kwargs)
 
 	class Meta:
 		verbose_name = "文章列表"
@@ -216,16 +217,17 @@ class MeanList(models.Model):
 
 
 class Courses(models.Model):
-	title = models.CharField(max_length=100,verbose_name="教程名称")
-	cover = models.ImageField(upload_to='course',verbose_name="上传封面",blank=True)
-	views = models.PositiveIntegerField(default=0, verbose_name="阅读量")
-	category = models.CharField(max_length=100,verbose_name="教程分类")
-	introduce = models.CharField(max_length=200,verbose_name="教程简介",blank=True)
-	status = models.CharField(max_length=50,verbose_name="更新状态")
-	created_time = models.DateTimeField(null=True, verbose_name='创建时间', default=timezone.now)
+	title = models.CharField("教程名称", max_length=100)
+	cover = models.ImageField("上传封面", upload_to='course', blank=True)
+	category = models.CharField("教程分类", max_length=100)
+	introduce = models.CharField("教程简介", max_length=200, blank=True)
+	status = models.CharField("更新状态", max_length=50)
+	article = models.ManyToManyField(Post, verbose_name="教程文章", blank=True)
+	created_time = models.DateTimeField('创建时间', null=True, default=timezone.now)
 	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.DO_NOTHING, default="reborn")
-	comments = models.PositiveIntegerField(default=0, verbose_name="评论数")
-	numbers = models.PositiveIntegerField(default=0, verbose_name="教程数量")
+	comments = models.PositiveIntegerField("评论数", default=0)
+	numbers = models.PositiveIntegerField("教程数量", default=0)
+	views = models.PositiveIntegerField("阅读量", default=0)
 
 	class Meta:
 		verbose_name = "教程列表"

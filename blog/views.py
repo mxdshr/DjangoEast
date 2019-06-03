@@ -1,16 +1,17 @@
 import markdown
 from .models import *
-from django.db.models import Count
 from django.views.generic import ListView
 from django.contrib.auth.models import User
 from django.utils.html import strip_tags
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
+from djangoblog import settings
+
 
 
 class IndexView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'posts'
-    paginate_by = 7
+    paginate_by = settings.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         return Post.objects.filter(status='p')
@@ -25,6 +26,8 @@ def article(request, pk):
         'markdown.extensions.extra',
         'markdown.extensions.codehilite',
         'markdown.extensions.toc',
+        'markdown.extensions.fenced_code',
+        # 'markdown.extensions.tables'
     ])
     post.body = md.convert(post.body)
     if strip_tags(md.toc).strip() == '':
@@ -41,7 +44,6 @@ def article(request, pk):
     context['category'] = category
     context['relative_posts'] = relative_posts
     return render(request, 'blog/article.html', context)
-
 
 class ArchivesView(ListView):
     template_name = 'blog/archives.html'
@@ -62,7 +64,7 @@ class TagsView(ListView):
 class TagListView(ListView):
     template_name = 'blog/tag_list.html'
     context_object_name = 'posts'
-    paginate_by = 7
+    paginate_by = settings.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
@@ -77,7 +79,7 @@ class TagListView(ListView):
 class CategoryView(ListView):
     template_name = 'blog/category.html'
     context_object_name = 'posts'
-    paginate_by = 7
+    paginate_by = settings.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
@@ -102,7 +104,7 @@ class Categories(ListView):
 class BooksView(ListView):
     template_name = 'book/books.html'
     context_object_name = 'books'
-    paginate_by = 8
+    paginate_by = settings.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         return Book.objects.all().order_by('-pk')
@@ -111,7 +113,7 @@ class BooksView(ListView):
 class BookListView(ListView):
     template_name = 'book/book_list.html'
     context_object_name = 'books'
-    paginate_by = 8
+    paginate_by = settings.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(BookTag,pk = self.kwargs.get('pk'))
@@ -126,7 +128,7 @@ class BookListView(ListView):
 class MoviesView(ListView):
     template_name = 'movie/movies.html'
     context_object_name = 'movies'
-    paginate_by = 8
+    paginate_by = settings.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         return Movie.objects.all().order_by('-created_time')
@@ -135,7 +137,7 @@ class MoviesView(ListView):
 class MovieListView(ListView):
     template_name = 'movie/movie_list.html'
     context_object_name = 'movies'
-    paginate_by = 8
+    paginate_by = settings.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(MovieTag,pk = self.kwargs.get('pk'))
@@ -160,8 +162,34 @@ class CoursesView(ListView):
         return Courses.objects.all().order_by('-created_time')
 
 
-def course(request,pk):
+def course(request, pk):
     course = get_object_or_404(Courses, pk=pk)
-    return render(request, 'course/course.html', context={'course':course})
+    return render(request, 'course/course.html', context={'course': course})
 
 
+def course_article(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    author = User.objects.get(id=post.author_id)
+    category = Category.objects.get(id=post.category_id)
+    post.increase_views()  # 阅读量加1
+    md = markdown.Markdown(extensions=[
+        'markdown.extensions.extra',
+        'markdown.extensions.codehilite',
+        'markdown.extensions.toc',
+    ])
+    post.body = md.convert(post.body)
+    if strip_tags(md.toc).strip() == '':
+        post.toc = ''
+    else:
+        post.toc = md.toc
+
+    # 获取相关文章
+    relative_posts = Post.objects.filter(category_id=post.category_id, status='p').exclude(pk=pk).order_by('?')[:4]
+
+    context = {}
+    context['post'] = post
+    context['author'] = author
+    context['category'] = category
+    context['relative_posts'] = relative_posts
+    context['course'] = post.courses_set.first()
+    return render(request, 'course/course.html', context)

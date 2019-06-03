@@ -23,5 +23,6 @@ urlpatterns = [
 
     path('courses/', views.CoursesView.as_view(), name='courses'),
     path('course/<int:pk>', views.course, name='course'),
+    path('course/article/<int:pk>', views.course_article, name='course_article')
 
 ]

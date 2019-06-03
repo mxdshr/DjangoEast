@@ -1,20 +1,16 @@
 language: python
 sudo: enabled
 services:
-    - mysql
+    - sqlite
 python:
     - "3.6"
     global:
      - TRAVIS=true
-     - DJANGO_SETTINGS_MODULE="djangoblog.settings"
+     - DJANGO_SETTINGS_MODULE="djangoblog.settings.travis"
 
 install:
   - pip install -r requirements.txt
 
-before_script:
-    - mysql -e 'CREATE DATABASE `django_east` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;'
-
 script:
-    - python manage.py makemigrations
-    - python manage.py migrate
+    - python manage.py test
 

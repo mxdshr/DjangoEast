@@ -24,23 +24,20 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'v8_ce#n3lleuhl(t4p^x)bd18_aarlmd$e!f*^4edjlm@*=9&)'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 
-
-
-# Application definition
+# APP注册
 INSTALLED_APPS = [
     'blog',
+    'notice',
+    'setting',
+    'comment',
+    'notifications',
+
     'xadmin',
     'crispy_forms',
     'haystack',
     'mdeditor',
-    'comment',
     'ckeditor',
-    'setting',
-    'django.contrib.sitemaps',  # 网站地图
-    'notifications',
-    'notice',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
 ]
 
 CKEDITOR_CONFIGS = {

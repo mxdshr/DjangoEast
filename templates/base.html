@@ -43,28 +43,25 @@
                         <li><a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa-fw {{ mean.icon }}"></i>{{ mean.title }}</a></li>
                     {% endfor %}
                 </ul>
-
-
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if user.is_authenticated  %}
-                            <li class="">
-                                {% notifications_unread as unread_count %}
-                                <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
-                            </li>
-
-                        {% else %}
-                            <li class="">
-                                <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录/注册</a>
-                            </li>
-                        {% endif %}
-                        <li class="navbar-search ">
-                            <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
-                                <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
-                                <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
-                            </form>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated  %}
+                        <li class="">
+                            {% notifications_unread as unread_count %}
+                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
                         </li>
-                    </ul>
 
+                    {% else %}
+                        <li class="">
+                            <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录/注册</a>
+                        </li>
+                    {% endif %}
+                    <li class="navbar-search ">
+                        <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
+                            <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
+                            <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -165,7 +162,7 @@
                 </div>
             </div>
 
-            <div class="copyright">
+            <div class="container copyright">
                 {% get_seo_info as seo_info %}
                 <span >© 2019 {{ seo_info.title }}</span>
                 <span class="post-meta-divider">|</span>
