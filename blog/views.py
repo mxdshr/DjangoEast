@@ -5,13 +5,14 @@ from django.contrib.auth.models import User
 from django.utils.html import strip_tags
 from django.shortcuts import render, get_object_or_404
 from djangoblog import settings
+from djangoblog.settings import base
 
 
 
 class IndexView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'posts'
-    paginate_by = settings.ARTICLE_PAGINATE_BY
+    paginate_by = base.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         return Post.objects.filter(status='p')
@@ -64,7 +65,7 @@ class TagsView(ListView):
 class TagListView(ListView):
     template_name = 'blog/tag_list.html'
     context_object_name = 'posts'
-    paginate_by = settings.ARTICLE_PAGINATE_BY
+    paginate_by = base.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
@@ -79,7 +80,7 @@ class TagListView(ListView):
 class CategoryView(ListView):
     template_name = 'blog/category.html'
     context_object_name = 'posts'
-    paginate_by = settings.ARTICLE_PAGINATE_BY
+    paginate_by = base.ARTICLE_PAGINATE_BY
 
     def get_queryset(self):
         cate = get_object_or_404(Category, pk=self.kwargs.get('pk'))
@@ -104,7 +105,7 @@ class Categories(ListView):
 class BooksView(ListView):
     template_name = 'book/books.html'
     context_object_name = 'books'
-    paginate_by = settings.BOOK_PAGINATE_BY
+    paginate_by = base.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         return Book.objects.all().order_by('-pk')
@@ -113,7 +114,7 @@ class BooksView(ListView):
 class BookListView(ListView):
     template_name = 'book/book_list.html'
     context_object_name = 'books'
-    paginate_by = settings.BOOK_PAGINATE_BY
+    paginate_by = base.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(BookTag,pk = self.kwargs.get('pk'))
@@ -128,7 +129,7 @@ class BookListView(ListView):
 class MoviesView(ListView):
     template_name = 'movie/movies.html'
     context_object_name = 'movies'
-    paginate_by = settings.BOOK_PAGINATE_BY
+    paginate_by = base.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         return Movie.objects.all().order_by('-created_time')
@@ -137,7 +138,7 @@ class MoviesView(ListView):
 class MovieListView(ListView):
     template_name = 'movie/movie_list.html'
     context_object_name = 'movies'
-    paginate_by = settings.BOOK_PAGINATE_BY
+    paginate_by = base.BOOK_PAGINATE_BY
 
     def get_queryset(self):
         tag = get_object_or_404(MovieTag,pk = self.kwargs.get('pk'))

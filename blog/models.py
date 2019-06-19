@@ -64,7 +64,7 @@ class Post(models.Model):
 	words = models.PositiveIntegerField('字数', default=0)
 	category = models.ForeignKey(Category, verbose_name='文章分类', on_delete=models.CASCADE)
 	tag = models.ManyToManyField(Tag, verbose_name='标签类型', blank=True)
-	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE, default="reborn")
+	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.CASCADE)
 	status = models.CharField('文章状态', max_length=1, choices=PUBLISH_STATUS, default='p')
 	stick = models.CharField('是否置顶', max_length=1, choices=STICK_STATUS, default='n')
 
@@ -224,7 +224,7 @@ class Courses(models.Model):
 	status = models.CharField("更新状态", max_length=50)
 	article = models.ManyToManyField(Post, verbose_name="教程文章", blank=True)
 	created_time = models.DateTimeField('创建时间', null=True, default=timezone.now)
-	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.DO_NOTHING, default="reborn")
+	author = models.ForeignKey(User, verbose_name='作者', on_delete=models.DO_NOTHING)
 	comments = models.PositiveIntegerField("评论数", default=0)
 	numbers = models.PositiveIntegerField("教程数量", default=0)
 	views = models.PositiveIntegerField("阅读量", default=0)

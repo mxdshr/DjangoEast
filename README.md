@@ -26,7 +26,7 @@ git clone https://github.com/mxdshr/DjangoEast.git
 pip install -r requirements.txt
 ```
 ### 2.3 修改配置文件
-打开 `django/settings.py`文件，找到下面的代码，填写数据库信息
+打开 `django/settins/local.py`文件，找到下面的代码，填写数据库信息
 ```python
 DATABASES = {
     'default': {
