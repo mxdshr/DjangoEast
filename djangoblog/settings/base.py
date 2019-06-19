@@ -1,7 +1,7 @@
 import os
 import sys
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..")
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = 'v8_ce#n3lleuhl(t4p^x)bd18_aarlmd$e!f*^4edjlm@*=9&)'
 ROOT_URLCONF = 'djangoblog.urls'
@@ -11,6 +11,16 @@ TIME_ZONE = 'Asia/Shanghai'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+DEBUG_TOOLBAR_CONFIG = {'JQUERY_URL': r'http://code.jquery.com/jquery-2.1.1.min.js'}
+
+# 文章列表分页数量
+ARTICLE_PAGINATE_BY = 7
+
+# 书单影单分页数量
+BOOK_PAGINATE_BY = 8
+
+# 搜索结果分页
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = 7
 
 # 中间件
 MIDDLEWARE = [
@@ -20,6 +30,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -36,6 +47,8 @@ INSTALLED_APPS = [
     'haystack',
     'mdeditor',
     'ckeditor',
+    'debug_toolbar',
+    'rest_framework',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,7 +64,7 @@ INSTALLED_APPS = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -108,7 +121,6 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(BASE_DIR, 'whoosh_index'),
     },
 }
-HAYSTACK_SEARCH_RESULTS_PER_PAGE = 5
 HAYSTACK_SIGNAL_PROCESSOR = 'haystack.signals.RealtimeSignalProcessor'
 
 AUTH_PASSWORD_VALIDATORS = [
