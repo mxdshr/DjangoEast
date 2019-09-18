@@ -1,5 +1,4 @@
 *.pyc
 *.xml
-*/__pycache__
 .idea
-*/migrations/*
+apps/*/migrations/*.py
