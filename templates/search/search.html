@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load highlight %}
+{% load staticfiles %}
+{% load blog_tags %}
+
+{% block content_left %}
+    {% if query %}
+        <div class="django-panel">
+            {% for post in page.object_list%}
+                <div class="post-block">
+                    <div class="post-item">
+                        <div class="post-title" >
+                            <a title="{{ post.object.title }}" href="{{ post.object.get_absolute_url }}">{% highlight post.object.title with query %}</a>
+                        </div>
+
+                         <div class="post-excerpt">
+                            <p>{% highlight post.object.body with query %}</p>
+                        </div>
+
+                        <div class="post-meta">
+                            <span>日期：{{ post.object.created_time| date:"Y-m-d" }}</span>
+                            <span>分类：{{ post.category }}</span>
+                            <span>阅读({{ post.object.views }})</span>
+                            <span>评论({% get_comment_count post.object %})</span>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="django-panel django-panel-padding">
+                    <p>Sorry......没有找到任何结果!</p>
+                    <p>请输入<strong>完整且有意义</strong>的检索关键词，比如：django</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="django-panel django-pages">
+            <nav class="pagination django-pages-ul">
+                <li><a href="?q={{ query }}&amp;?page=1"><i class="fa fa-step-backward" aria-hidden="true"></i></a></li>
+
+                {% if page.has_previous%}
+                    <li><a href="?q={{ query }}&amp;page={{page.previous_page_number }}"><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li><a href=""><i class="fa fa-chevron-left" aria-hidden="true"></i></a></li>
+                {% endif %}
+
+
+                <li><a href="">{{ page.number }} of {{ page.paginator.num_pages }}</a></li>
+
+                {% if page.has_next %}
+                    <li><a href="?q={{ query }}&amp;page={{ page.next_page_number }}"><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+                {% else %}
+                    <li><a href=""><i class="fa fa-chevron-right" aria-hidden="true"></i></a></li>
+                {% endif %}
+
+                <li><a href="?q={{ query }}&amp;page={{ page.paginator.num_pages }}"><i class="fa fa-step-forward" aria-hidden="true"></i></a></li>
+            </nav>
+        </div>
+
+    {% else %}
+        <div class="django-panel-padding django-panel">
+            请输入关键词再进行搜索~
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,186 @@
+{% load staticfiles %}
+{% load blog_tags %}
+{% load notifications_tags %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base target="_self">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/blog/image/favi.ico' %}">
+    <script type="text/javascript" src="{% static '/blog/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/base.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/bootstrap3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static '/blog/bootstrap3.3.7/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    {% block meta %}{% endblock %}
+</head>
+
+<body lang="zh-CN">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">导航切换</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'blog:index' %}" >向东的笔记本</a>
+            </div>
+
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse" >
+                <ul class="nav navbar-nav">
+                    {% get_meanList as means %}
+                        {# 默认菜单栏 #}
+                        <li><a href="{% url 'blog:index' %}" ><i class="menu-item-icon fa fa-fw fa-home"></i>首页</a></li>
+                        <li><a href="{% url 'blog:archives' %}" ><i class="menu-item-icon fa fa fa-calendar"></i>归档</a></li>
+                        <li><a href="{% url 'blog:categories' %}" ><i class="menu-item-icon fa fa fa-th"></i>分类</a></li>
+                        <li><a href="{% url 'blog:books' %}" ><i class="menu-item-icon fa fa fa-book"></i>书单</a></li>
+                        <li><a href="{% url 'blog:movies' %}" ><i class="menu-item-icon fa fa fa-film"></i>影单</a></li>
+                        <li><a href="{% url 'blog:messages' %}" ><i class="menu-item-icon fa fa fa-pencil-square"></i>留言</a></li>
+
+                    {# 自定义菜单栏 #}
+                    {% for mean in means %}
+                        {% if mean.status == 'y'%}
+                            <li><a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa {{ mean.icon }}"></i>{{ mean.title }}</a></li>
+                        {% endif%}
+                    {% endfor %}
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated  %}
+                        <li class="">
+                            {% notifications_unread as unread_count %}
+                            <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
+                        </li>
+
+                    {% else %}
+                        <li class="">
+                            <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录/注册</a>
+                        </li>
+                    {% endif %}
+                    <li class="navbar-search ">
+                        <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
+                            <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
+                            <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% block content %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9 col-xs-12">
+
+                    {% block content_left %}{% endblock %}
+
+                    {% block content_paginate %}{% endblock %}
+
+                    {% block content_comment %}{% endblock %}
+
+                </div>
+
+                <div class="col-md-3 col-xs-12">
+                    {% block content_right %}
+                    <div class = "content-sidebar">
+{#                        {% get_social_media as social_media %}#}
+                        {% block sidebar %}
+                            {% block toc_sidebar %}{% endblock %}
+    {#                                {% block social_sidebar %}#}
+    {#                                    <div class="sidebar">#}
+    {#                                        <div class="title"><h3>社交账号</h3>#}
+    {#                                            <div class="social">#}
+    {#                                                <a target="_blank" href="{{ social_media.github }}"><div class="social-media"><i class="fa fa-github fa-3x social-github" aria-hidden="true"></i></div></a>#}
+    {#                                                <a target="_blank" href="{{ social_media.wei_bo }}"><div class="social-media"><i class="fa fa-weibo fa-3x social-item" aria-hidden="true"></i></div></a>#}
+    {#                                                <a target="_blank" href="{{ social_media.zhi_hu }}"><div class="social-media"><i class="fa  fa-3x social-item" aria-hidden="true"><span class="social-font">知</span></i></div></a>#}
+    {#                                                <a target="_blank" href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin={{ social_media.qq }}"><div class="social-media"><i class="fa fa-qq fa-3x social-item" aria-hidden="true"></i></div></a>#}
+    {#                                            </div>#}
+    {#                                        </div>#}
+    {#                                </div>#}
+    {#                                {% endblock %}#}
+
+                            {% block category_sidebar %}
+                                <div class="sidebar">
+                                    <div class="title"><h3>文章分类</h3></div>
+                                        <div class="git_tags">
+                                                {% get_category as categories %}
+                                                {% for category in categories %}
+                                                    <a href="{{ category.get_absolute_url  }}">{{ category.name }}</a>
+                                                {% endfor %}
+                                        </div>
+                                </div>
+                            {% endblock %}
+
+                            {% block tag_sidebar %}
+                                <div class="sidebar" >
+                                    <div class="title"><h3>热门标签</h3></div>
+                                    <div class="git_tags">
+                                        {% get_posts_tags as tags %}
+                                        {% for tag in tags %}
+                                            <a href="{{ tag.get_absolute_url  }}">{{ tag.name }}</a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            {% endblock %}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+                </div>
+        </div>
+        </div>
+    {% endblock %}
+
+    {% block bottom %}
+        <div class="footer">
+            <div class="container">
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">关于本站</h4>
+                        {% get_site_info as site_info %}
+                        <p>1. 本站于 {{ site_info.created_time | date:"Y-m-d" }} 开始上线</p>
+                        <p>2. {{ site_info.development_info }}</p>
+                        <p>3. {{ site_info.arrange_info }}</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">联系站长</h4>
+                        {% get_social_media as social_media %}
+                        <p>1. 微信号：{{ social_media.wechat }}</p>
+                        <p>2. 公众号：{{ social_media.official_wechat }}</p>
+                        {% get_custom_code as custom_code %}
+                        <p>3. {% autoescape off %}{{ custom_code.statistics }}{% endautoescape %}</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">友情链接</h4>
+                        {% get_friend_links as links %}
+                        {% for link in links %}
+                            <p><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="container copyright">
+                {% get_seo_info as seo_info %}
+                <span >© 2019 {{ seo_info.title }}</span>
+                <span class="post-meta-divider">|</span>
+                <span><a href="http://www.miitbeian.gov.cn">{{ site_info.record_info}}</a></span>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block script_extends %} {% endblock %}
+
+</body>
+</html>

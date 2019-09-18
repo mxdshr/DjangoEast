@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+{% load staticfiles %}
+
+{% block meta %}
+<title>{{ post.title }}</title>
+<meta name="description" content="{{ post.excerpt }}"/>
+<meta name="keywords" content="{% for tag in post.tag.all %}{{ tag.name }},{% endfor %}"/>
+{% endblock %}
+
+{% block content_left %}
+    <div class="django-panel">
+        <div class="article">
+            <!--文章头部信息-->
+            <div class="article-header">
+                <h2>{{ post.title }}</h2>
+                <div class="article-meta">
+                    <span>日期：{{ post.created_time }}</span>
+
+                    <span>分类：<a href="{% url 'blog:category' post.category.id %}" itemprop="url" rel="index">{{ category.name }}</a></span>
+
+                    <span>
+                        <span>标签：
+                            {% for tag in post.tag.all %}
+                                <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+                            {% endfor %}
+                        </span>
+                    </span>
+                    <span class="post-views">阅读（{{ post.views }}）</span>
+
+                    <span>评论({% get_comment_count post %})</span>
+                </div>
+            </div>
+
+            <!--文章内容-->
+            <div class="article-body">
+                {% autoescape off %}
+                    {{ post.body }}
+                {% endautoescape %}
+            </div>
+
+            <!--版权声明-->
+{#            <div class="article-copyright">#}
+{#                <ul>#}
+{#                  <li><strong>网站名称： </strong><a href="{% url 'blog:index' %}">向东的笔记本</a></li>#}
+{#                  <li><strong>本文链接：</strong><a href="{{ post.get_absolute_url }}" title="{{ post.title }}"> https://www.eastnotes.com{{ post.get_absolute_url }}</a></li>#}
+{#                  <li><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>#}
+{#                </ul>#}
+{#            </div>#}
+
+            <!--文章底部信息-->
+            <div class="article-footer">
+                <div class="article-footer-relative">
+                    <h3 class="comment-area-title">相关文章</h3>
+                    {% for relative_post in relative_posts %}
+                        <li class="relative_posts"><a class="relative_posts" href="{{ relative_post.get_absolute_url }}" title="{{ relative_post.title }}"><i class="fa fa-minus" aria-hidden="true"></i><span>{{ relative_post }}</span></a></li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+{% block content_comment %}
+    <div class="django-panel">
+        <div class="django-comment">
+                    <!--评论提交区域-->
+            <div class="comment-area">
+                <h3 class="comment-area-title">提交评论</h3>
+                {% if user.is_authenticated  %}
+                    <form id = "comment_form" action="{% url 'comment:update_comment' %}" method="POST">
+
+                        <div id="reply_content_container" style="display:none;">
+                            <p id="reply_title">回复：</p>
+                            <div id="reply_content"></div>
+                        </div>
+
+                        {% csrf_token %}
+                        {% get_comment_form post as comment_form%}
+
+                        {% for field in comment_form %}
+                            {{ field }}
+                        {% endfor %}
+
+                        <span id="comment_error" class="text-danger pull-left"></span>
+                        <input class="btn btn-primary pull-right" type="submit" value="评论">
+                    </form>
+                {% else %}
+                    请先登录后评论
+                    <a class = "btn btn-primary" href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                    <span> or </span>
+                    <a class = "btn btn-danger" href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+                {% endif %}
+            </div>
+
+            <!--评论显示区域-->
+            <div class="comment-area">
+                <h3 class="comment-area-title" id="comment">评论列表</h3>
+                <div id="comment_list">
+                    {% get_comments_list post as comments %}
+                    {% for comment in comments %}
+                        <div id="root_{{ comment.pk }}" class="comment">
+                            <div class="comment_user">
+                                {% ifequal comment.user.username 'reborn' %}
+                                    <img class="user_avatar" src="{% static 'blog/image/touxiang.jpg' %}" alt="{{ comment.user.username }}" style="border: 1px solid #ccc">
+                                    <span class="user_name comment_name">
+                                        <span style="color: #d23f31;">博主</span>
+                                    </span>
+                                {% else %}
+                                    <img class="user_avatar" src="{% static 'blog/image/touxiang.png' %}" alt="{{ comment.user.username }}" style="border: 1px solid #ccc">
+                                    <span class="user_name comment_name">
+                                        <span >{{ comment.user.username }}</span>
+                                    </span>
+                                {% endifequal %}
+                            </div>
+                            <div class="comment_body">
+
+                                <div class="comment_content" id="comment_{{ comment.pk }}">
+                                    {{ comment.text|safe }}
+                                </div>
+
+                                <p class="comment_bottom">
+                                    <span class="">{{ comment.comment_time|date:'Y-m-d H:i:s'}}</span>
+                                    <span class="reply_button"><a class="" href="javascript:reply({{ comment.pk }})">回复</a></span>
+                                </p>
+
+                                {% if reply.user.username is  null %}
+                                <ul class="comment_reply">
+                                    {% for reply in comment.root_comment.all %}
+                                        <li class="reply">
+                                            {% ifequal reply.user.username 'reborn' %}
+                                                <img class="reply_avatar" src="{% static 'blog/image/touxiang.jpg' %}" alt="{{ reply.user.username }}" style="border: 1px solid #ccc">
+                                                <div class="reply_body">
+                                                    <p>
+                                                        <span class="comment_name reply_name" style="color: #d23f31;">博主</span>
+                                            {% else %}
+                                                <img class="reply_avatar" src="{% static 'blog/image/touxiang.png' %}" alt="{{ reply.user.username }}">
+                                                <div class="reply_body">
+                                                    <p>
+                                                        <span class="comment_name reply_name">{{ reply.user.username }}</span>
+                                            {% endifequal %}
+                                                    <span><i class="fa fa-share" aria-hidden="true"></i></span>
+                                            {% ifequal reply.reply_to.username 'reborn' %}
+                                                    <span class="comment_name" style="color: #d23f31;">博主:</span>
+                                            {% else %}
+                                                    <span class="comment_name">{{ reply.reply_to.username }}:</span>
+                                            {% endifequal %}
+                                                    </p>
+                                                <div class = "reply_content" id="comment_{{ reply.pk }}">
+                                                    {{ reply.text|safe }}
+                                                </div>
+                                                 <p class="comment_bottom">
+                                                    <span>{{ reply.comment_time|date:'Y-m-d H:i:s'}}</span>
+                                                    <span><a href="javascript:reply({{ reply.pk }})">回复</a></span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                     {% empty %}
+                            此篇文章暂无评论，快来说两句吧！
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block script_extends %}
+    <script type="text/javascript">
+            function reply(reply_comment_id){
+            // 设置值
+            $('#reply_comment_id').val(reply_comment_id);
+            var html = $("#comment_" + reply_comment_id).html();
+            $('#reply_content').html(html);
+            $('#reply_content_container').show();
+            $('html').animate({scrollTop: $('#comment_form').offset().top - 60}, 300, function(){
+                CKEDITOR.instances['id_text'].focus();
+            });
+        }
+
+        $("#comment_form").submit(function(){
+            // 清空错误内容
+            $("#comment_error").text('');
+            // 更新数据
+            if(CKEDITOR.instances['id_text'].document.getBody().getText().trim() === ''){
+                // 显示错误信息
+                $("#comment_error").text('评论内容不能为空');
+                return false;
+            }
+        });
+
+    </script>
+{% endblock %}
+
+
+{% block toc_sidebar %}
+    {% ifnotequal '' post.toc %}
+        <div class="sidebar" >
+            <div class="title">
+                <h3>文章目录</h3>
+            </div>
+            <div class="post-toc">
+                {% autoescape off %}
+                {{ post.toc }}
+                {% endautoescape %}
+            </div>
+        </div>
+    {% endifnotequal %}
+{% endblock %}
+
+
+

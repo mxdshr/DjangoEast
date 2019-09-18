@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load blog_tags %}
+
+
+{% block meta %}
+<title>我的消息</title>
+{% endblock %}
+
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
+        <div class="messages">
+            <a class="btn btn-primary" href="{% url 'notifications:mark_all_as_read'%}?next={% url 'notice:my_notifications' %}">全部设为已读</a>
+            <a class="btn btn-danger" href="{% url 'notice:delete_my_read_notifications' %}">删除已读消息</a><br>
+            {% for notification in request.user.notifications.all %}
+                <ul class="notification">
+                    <li class="{% if not notification.unread %}read{% endif %}">
+                        ({{ notification.timesince }}之前)
+                        <a href="{% url 'notice:my_notification'  notification.pk %}">{{ notification.verb }}</a>
+                    </li>
+                </ul>
+            {% empty %}
+                <li class="notification">暂时没有消息</li>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

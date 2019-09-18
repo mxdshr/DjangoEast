@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+
+
+{% block meta %}
+    {% get_seo_info as seo_info %}
+    <title>{{ seo_info.title }}—{{ seo_info.sub_title }}</title>
+    <meta name="description" content="{{ seo_info.description }}"/>
+    <meta name="keywords" content="{{ seo_info.keywords }}" />
+{% endblock %}
+
+
+{% block content_left %}
+    <div class="django-panel">
+        <div class="post-list">
+            {% for post in posts%}
+                <div class="post-block">
+                    <div class="post-item">
+                        <div class="post-title" >
+                            <a title="{{ post.title }}" href="{{ post.get_absolute_url }}" >{{ post.title | slice:":50" }}</a>
+                        </div>
+
+                        <div class="post-excerpt">
+                            <p>{{ post.excerpt}}......</p>
+                        </div>
+
+                        <div class="post-meta">
+                            <span>日期：{{ post.created_time| date:"Y-m-d" }}</span>
+                            <span>分类：{{ post.category }}</span>
+                            <span>阅读({{ post.views }})</span>
+                            <span>评论({% get_comment_count post %})</span>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content_paginate %}
+    {% if is_paginated %}
+        <div class="django-panel django-pages">
+            <div class="">
+                <ul class="pagination django-pages-ul">
+                        <li><a href="?page=1"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></a></li>
+
+                        {% if page_obj.has_previous %}
+                            <li><a href="?page={{ page_obj.previous_page_number }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                        {% else %}
+                            <li><a href=""><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                        {% endif %}
+
+                        <li><span class="page-style" >{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                        {% if page_obj.has_next %}
+                            <li><a class="page-style" href="?page={{ page_obj.next_page_number }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+                        {% else %}
+                            <li><span class="end-page-style page-style"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></li>
+                        {% endif %}
+
+                        <li><a class="page-style" href="?page={{ page_obj.paginator.num_pages }}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a></li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% load staticfiles %}
+<html lang="zh-CN">
+<head>
+    <title>注册页面</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'blog/bootstrap3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'blog/bootstrap3.3.7/js/bootstrap.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/base.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
+</head>
+
+<body style="background-color: #29a8d8!important;">
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <form class="form-horizontal" method="POST">
+                <span class="heading">用户注册</span>
+                {% csrf_token %}
+                {% for field in reg_form %}
+                    <div class="form-group">
+                        {{ field }}
+                        <i class="{{ field.label }}"></i>
+                        <p class="text-danger">{{ field.errors.as_text }}</p>
+                    </div>
+                {% endfor %}
+                <span class="pull-left text-danger">{{ reg_form.non_field_errors }}</span>
+                <button type="submit" class="btn btn-default">注册</button>
+            </form>
+
+            <div class="form-horizontal_register">
+                已有账号？<a href="{% url 'login' %}"><button type="submit" class="btn btn-default btn-danger">登录</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+
+
+

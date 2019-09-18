@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
+        <div class="shuoshuo">
+             <ul class="archives-monthlisting">
+                 {% for list in lists %}
+                      <li>
+                          <span class="tt">{{ list.created_time }}</span>
+                           <div id="shuo-7947" class="shuoshuo-content">
+                                <p>{{ list.body }}</p>
+                           </div>
+                      </li>
+                 {% endfor %}
+               </ul>
+          </div>
+    </div>
+{% endblock %}
+
+
+{% block content_paginate %}
+    {% if is_paginated %}
+        <div class="django-panel django-pages">
+            <ul class="pagination django-pages-ul">
+                    <li><a href="?page=1"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></a></li>
+
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><a href=""><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% endif %}
+
+                    <li><span class="page-style" >{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                    {% if page_obj.has_next %}
+                        <li><a class="page-style" href="?page={{ page_obj.next_page_number }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><span class="end-page-style page-style"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></li>
+                    {% endif %}
+
+                    <li><a class="page-style" href="?page={{ page_obj.paginator.num_pages }}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a></li>
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

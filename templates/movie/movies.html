@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load blog_tags %}
+
+
+{% block meta %}
+<title>我的影单</title>
+{% endblock %}
+
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
+        <h1 align="center">我的影单(共{% get_total_movies %}部)</h1>
+        <div class="django-card">
+            {% for movie in lists %}
+                    <div class="card col span_1_of_4" role="main">
+                        <div class="card-item">
+                            <div class="card-cover">
+                                <div class="card-category">
+                                    <a href="">{{ movie.category }}</a>
+                                </div>
+                                {% if movie.pid != "" %}
+                                    <a href="{{ movie.get_absolute_url }}" target="_blank"><img alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}"></a>
+                                {% else %}
+                                    <img alt="{{ movie.name }}" src="{% url 'blog:index' %}media/{{ movie.cover }}">
+                                {% endif %}
+                            </div>
+
+                            <div class="card-detail">
+                                <h3>{{ movie.name }}</h3>
+                                <p>豆瓣评分：{{ movie.score }}<br></p>
+                                <p>观看时间：{{ movie.watch_time|date:"Y.m.d" }}</p>
+
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content_paginate %}
+    {% if is_paginated %}
+        <div class="django-panel django-pages">
+            <ul class="pagination django-pages-ul">
+                    <li><a href="?page=1"><span class="glyphicon glyphicon-step-backward" aria-hidden="true"></span></a></li>
+
+                    {% if page_obj.has_previous %}
+                        <li><a href="?page={{ page_obj.previous_page_number }}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><a href=""><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a></li>
+                    {% endif %}
+
+                    <li><span class="page-style" >{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                    {% if page_obj.has_next %}
+                        <li><a class="page-style" href="?page={{ page_obj.next_page_number }}"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></a></li>
+                    {% else %}
+                        <li><span class="end-page-style page-style"><span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span></span></li>
+                    {% endif %}
+
+                    <li><a class="page-style" href="?page={{ page_obj.paginator.num_pages }}"><span class="glyphicon glyphicon-step-forward" aria-hidden="true"></span></a></li>
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+
+
+{% block tag_sidebar %}
+    <div class="sidebar" >
+            <div class="title"><h3>热门标签</h3></div>
+            <div class="git_tags">
+                {% get_movies_tags as tags %}
+                {% for tag in tags %}
+                    <a href="{{ tag.get_absolute_url  }}" data-original-title="1304个话题">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load blog_tags %}
+
+{% block meta %}
+    <title>分类目录</title>
+{% endblock %}
+
+
+{% block content_left %}
+    <div class="django-panel">
+        {% regroup posts|dictsort:"category_id" by category.name as post_list %}
+        <div class="article_box">
+            {% for posts in post_list %}
+                <section>
+                    <div class="news">
+                      <h2 class="article_box_title"><span><a href="/category/{% get_category_id posts.grouper %}">更多</a></span><b>{{ posts.grouper }}</b></h2>
+                          <ul>
+                              {% for post  in posts.list|slice:":8" %}
+                                  <li><a href="{{ post.get_absolute_url }}" target="_blank"><span>{{ post.created_time | date:"m-d" }}</span>{{ post.title }}</a> </li>
+                              {% endfor %}
+                          </ul>
+                    </div>
+                </section>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

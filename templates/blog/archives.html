@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block meta %}
+    <title>文章归档</title>
+{% endblock %}
+
+
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
+        <div class="mobile-archives">
+            {% regroup posts by created_time|date:"Y" as years %}
+            {% for year in years %}
+                <h4>{{ year.grouper }}年 ({{ year.list | length }})</h4>
+                {% regroup year.list by created_time|date:"m" as months %}
+                {% for month in months %}
+                    <h5>{{ month.grouper }}月</h5>
+                        <ul>
+                            {% for post in month.list %}
+                                <li class="archives">
+                                    <span>{{ post.created_time | date:"d" }}日</span>&nbsp;&nbsp;&nbsp;
+                                    <a href="{{ post.get_absolute_url }}">{{ post.title | slice:":50"}}</a>
+                                    <span class="archives-view">{{ post.views }}&nbsp; views</span></span>
+                                </li>
+                           {% endfor %}
+                        </ul>
+                {% endfor %}
+                    {% if forloop.last == False %}<hr>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
+
+

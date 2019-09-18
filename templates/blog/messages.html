@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load blog_tags %}
+
+{% block content_left %}
+    <div class="django-panel django-panel-padding">
+            <!--评论提交区域-->
+            <div class="comment-area">
+                <h3 class="comment-area-title">提交留言</h3>
+                {% if user.is_authenticated  %}
+                    <form id = "comment_form" action="{% url 'comment:update_comment' %}" method="POST">
+
+                        <div id="reply_content_container" style="display:none;">
+                            <p id="reply_title">回复：</p>
+                            <div id="reply_content"></div>
+                        </div>
+
+                        {% csrf_token %}
+                        {% get_comment_form messages as comment_form%}
+
+                        {% for field in comment_form %}
+                            {{ field }}
+                        {% endfor %}
+
+                        <span id="comment_error" class="text-danger pull-left"></span>
+                        <input class="btn btn-primary pull-right" type="submit" value="评论">
+                    </form>
+                {% else %}
+                    请先登录后评论
+                    <a class = "btn btn-primary" href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                    <span> or </span>
+                    <a class = "btn btn-danger" href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+                {% endif %}
+            </div>
+
+            <!--评论显示区域-->
+            <div class="comment-area">
+                <h3 class="comment-area-title" id="comment">留言列表</h3>
+                <div id="comment_list">
+                    {% get_comments_list messages as comments %}
+                    {% for comment in comments %}
+                        <div id="root_{{ comment.pk }}" class="comment">
+                            <div class="comment_user">
+                                {% ifequal comment.user.username 'reborn' %}
+                                    <img class="user_avatar" src="{% static 'blog/image/touxiang.jpg' %}" alt="{{ comment.user.username }}" style="border: 1px solid #ccc">
+                                    <span class="user_name comment_name">
+                                        <span style="color: #d23f31;">博主</span>
+                                    </span>
+                                {% else %}
+                                    <img class="user_avatar" src="{% static 'blog/image/touxiang.png' %}" alt="{{ comment.user.username }}" style="border: 1px solid #ccc">
+                                    <span class="user_name comment_name">
+                                        <span >{{ comment.user.username }}</span>
+                                    </span>
+                                {% endifequal %}
+                            </div>
+                            <div class="comment_body">
+
+                                <div class="comment_content" id="comment_{{ comment.pk }}">
+                                    {{ comment.text|safe }}
+                                </div>
+
+                                <p class="comment_bottom">
+                                    <span class="">{{ comment.comment_time|date:'Y-m-d H:i:s'}}</span>
+                                    <span class="reply_button"><a class="" href="javascript:reply({{ comment.pk }})">回复</a></span>
+                                </p>
+
+                                {% if reply.user.username is  null %}
+                                <ul class="comment_reply">
+                                    {% for reply in comment.root_comment.all %}
+                                        <li class="reply">
+                                            {% ifequal reply.user.username 'reborn' %}
+                                                <img class="reply_avatar" src="{% static 'blog/image/touxiang.jpg' %}" alt="{{ reply.user.username }}" style="border: 1px solid #ccc">
+                                                <div class="reply_body">
+                                                    <p>
+                                                        <span class="comment_name reply_name" style="color: #d23f31;">博主</span>
+                                            {% else %}
+                                                <img class="reply_avatar" src="{% static 'blog/image/touxiang.png' %}" alt="{{ reply.user.username }}">
+                                                <div class="reply_body">
+                                                    <p>
+                                                        <span class="comment_name reply_name">{{ reply.user.username }}</span>
+                                            {% endifequal %}
+                                                    <span><i class="fa fa-share" aria-hidden="true"></i></span>
+                                            {% ifequal reply.reply_to.username 'reborn' %}
+                                                    <span class="comment_name" style="color: #d23f31;">博主:</span>
+                                            {% else %}
+                                                    <span class="comment_name">{{ reply.reply_to.username }}:</span>
+                                            {% endifequal %}
+                                                    </p>
+                                                <div class = "reply_content" id="comment_{{ reply.pk }}">
+                                                    {{ reply.text|safe }}
+                                                </div>
+                                                 <p class="comment_bottom">
+                                                    <span>{{ reply.comment_time|date:'Y-m-d H:i:s'}}</span>
+                                                    <span><a href="javascript:reply({{ reply.pk }})">回复</a></span>
+                                                </p>
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                     {% empty %}
+                            暂无留言，快来给我说两句~
+                    {% endfor %}
+                </div>
+            </div>
+    </div>
+{% endblock %}
+
+{% block script_extends %}
+    <script type="text/javascript">
+            function reply(reply_comment_id){
+            // 设置值
+            $('#reply_comment_id').val(reply_comment_id);
+            var html = $("#comment_" + reply_comment_id).html();
+            $('#reply_content').html(html);
+            $('#reply_content_container').show();
+            $('html').animate({scrollTop: $('#comment_form').offset().top - 60}, 300, function(){
+                CKEDITOR.instances['id_text'].focus();
+            });
+        }
+
+        $("#comment_form").submit(function(){
+            // 清空错误内容
+            $("#comment_error").text('');
+            // 更新数据
+            if(CKEDITOR.instances['id_text'].document.getBody().getText().trim() === ''){
+                // 显示错误信息
+                $("#comment_error").text('评论内容不能为空');
+                return false;
+            }
+        });
+
+    </script>
+{% endblock %}

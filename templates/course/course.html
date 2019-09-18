@@ -1,0 +1,213 @@
+{% load staticfiles %}
+{% load blog_tags %}
+{% load notifications_tags %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base target="_self">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/highlights/github.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/css/font-awesome.min.css' %}">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static '/blog/image/favi.ico' %}">
+    <script type="text/javascript" src="{% static '/blog/jquery.min.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'blog/base.css' %}">
+    <link rel="stylesheet" href="{% static '/blog/bootstrap3.3.7/css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static '/blog/bootstrap3.3.7/js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
+    {% block meta %}{% endblock %}
+</head>
+
+<body lang="zh-CN">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container course-container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">导航切换</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'blog:index' %}" >向东的笔记本</a>
+            </div>
+
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse" >
+                <ul class="nav navbar-nav">
+                    {% get_meanList as means %}
+                        <li><a href="{% url 'blog:index' %}" ><i class="menu-item-icon fa fa-fw fa-home"></i>首页</a></li>
+
+                    {% for mean in means %}
+                        <li><a href="{% url 'blog:index' %}{{ mean.link }}"><i class="menu-item-icon fa-fw {{ mean.icon }}"></i>{{ mean.title }}</a></li>
+                    {% endfor %}
+                </ul>
+
+
+                    <ul class="nav navbar-nav navbar-right">
+                        {% if user.is_authenticated  %}
+                            <li class="">
+                                {% notifications_unread as unread_count %}
+                                <a href="{% url 'notice:my_notifications' %}"><i class="fa fa-bell" aria-hidden="true"></i>{% if unread_count %} <span class="badge">{{ unread_count }}</span>{% endif %}</a>
+                            </li>
+
+                        {% else %}
+                            <li class="">
+                                <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录/注册</a>
+                            </li>
+                        {% endif %}
+                        <li class="navbar-search ">
+                            <form action="{% url 'haystack_search' %}" class="navbar-form navbar-right">
+                                <input type="search" name="q"  placeholder="搜索..." autocomplete="off" class="form-control"/>
+                                <button type="submit"><span class="glyphicon glyphicon-search"></span></button>
+                            </form>
+                        </li>
+                    </ul>
+
+            </div>
+        </div>
+    </div>
+    <div class="container course-container">
+        <nav class="navbar-header course-navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#course-nav" aria-expanded="true">
+                <span class="sr-only">导航切换</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </nav>
+        <div id="bs-example-navbar-collapse-1" class="row">
+            <div class="col-md-3" >
+                <div id="course-nav" class="collapse navbar-collapse course-collapse">
+                    <div class="sidebar course-sidebar">
+                        <div class="title">
+                            <h3>教程列表</h3>
+                        </div>
+                        <div class="course-articles">
+                            <ul>
+                                {% for article in course.article.all  reversed%}
+                                    <li class="archives">
+                                        <a href="{% url 'blog:course_article' article.pk%}">{{ article.title }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6" style="min-height: 485px; background-color: #fff">
+            <div class="django-panel">
+                <div class="article">
+                    <!--文章头部信息-->
+                    <div class="article-header">
+                        <h2>{{ post.title }}</h2>
+                        <div class="article-meta">
+                            <span>日期：{{ post.created_time }}</span>
+
+        {#                    <span>分类：<a href="{% url 'blog:category' post.category.id %}" itemprop="url" rel="index">{{ category.name }}</a></span>#}
+
+                            <span>
+                                <span>标签：
+                                    {% for tag in post.tag.all %}
+                                        <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+                                    {% endfor %}
+                                </span>
+                            </span>
+                            <span class="post-views">阅读（{{ post.views }}）</span>
+
+        {#                    <span>评论({% get_comment_count post %})</span>#}
+                        </div>
+                    </div>
+
+                    <!--文章内容-->
+                    <div class="article-body">
+                        {% autoescape off %}
+                            {{ post.body }}
+                        {% endautoescape %}
+                    </div>
+
+                    <!--版权声明-->
+                    <div class="article-copyright">
+                        <ul>
+                          <li><strong>网站名称： </strong><a href="{% url 'blog:index' %}">向东的笔记本</a></li>
+                          <li><strong>本文链接：</strong><a href="{{ post.get_absolute_url }}" title="{{ post.title }}"> https://www.eastnotes.com{{ post.get_absolute_url }}</a></li>
+                          <li><strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！</li>
+                        </ul>
+                    </div>
+
+                    <!--文章底部信息-->
+                    <div class="article-footer">
+                        <div class="article-footer-relative">
+                            <h3 class="comment-area-title">相关文章</h3>
+                            {% for relative_post in relative_posts %}
+                                <li class="relative_posts"><a class="relative_posts" href="{{ relative_post.get_absolute_url }}" title="{{ relative_post.title }}"><i class="fa fa-minus" aria-hidden="true"></i>{{ relative_post }}</a></li>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="col-md-3" style="min-height: 485px;">
+            <div class="sidebar course-toc">
+                <div class="title">
+                    <h3>文章目录</h3>
+                </div>
+                <div class="post-toc">
+                    <div class="toc">
+                        {% autoescape off %}
+                        {{ post.toc }}
+                        {% endautoescape %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    {% block bottom %}
+        <div class="footer">
+            <div class="container">
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">关于本站</h4>
+                        {% get_site_info as site_info %}
+                        <p>1. 本站于 {{ site_info.created_time | date:"Y-m-d" }} 开始上线</p>
+                        <p>2. {{ site_info.development_info }}</p>
+                        <p>3. {{ site_info.arrange_info }}</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">联系站长</h4>
+                        {% get_social_media as social_media %}
+                        <p>1. 微信号：{{ social_media.wechat }}</p>
+                        <p>2. 公众号：{{ social_media.official_wechat }}</p>
+                        {% get_custom_code as custom_code %}
+                        <p>3. {% autoescape off %}{{ custom_code.statistics }}{% endautoescape %}</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="content">
+                        <h4 class="title">友情链接</h4>
+                        {% get_friend_links as links %}
+                        {% for link in links %}
+                            <p><a href="{{ link.link }}" target="_blank">{{ link.name }}</a></p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                {% get_seo_info as seo_info %}
+                <span >© 2019 {{ seo_info.title }}</span>
+                <span class="post-meta-divider">|</span>
+                <span><a href="http://www.miitbeian.gov.cn">{{ site_info.record_info}}</a></span>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block script_extends %} {% endblock %}
+</body>
+</html>
+
