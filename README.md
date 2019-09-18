@@ -5,7 +5,6 @@
 
 如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
 
-![](./static/display.png)
 
 ## 1. 主要功能
 - 支持访客留言功能

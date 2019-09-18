@@ -1,7 +1,7 @@
 from .base import *
 
 DEBUG = False
-ALLOWED_HOSTS = ['www.eastnotes.com', 'eastnotes.com', '118.89.245.71']
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
