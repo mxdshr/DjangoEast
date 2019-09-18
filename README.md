@@ -1,6 +1,6 @@
 # DjangoEast
 
-本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
+本网站基于`Django2.1`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
 
 [![Build Status](https://travis-ci.org/mxdshr/DjangoEast.svg?branch=master)](https://travis-ci.org/mxdshr/DjangoEast) ![GitHub release](https://img.shields.io/github/release/mxdshr/DjangoEast.svg)  [![Requirements Status](https://requires.io/github/mxdshr/DjangoEast/requirements.svg?branch=master)](https://requires.io/github/mxdshr/DjangoEast/requirements/?branch=master) ![GitHub](https://img.shields.io/github/license/mxdshr/DjangoEast.svg)
 
@@ -59,12 +59,14 @@ python manage.py runserver 127.0.0.1:8000
 如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
 ## 4.更新日志
 
+##第二版
 ### V2.1
 
 - 文章支持放入回收站、草稿箱功能，被放入的文章不会再前端显示
 - 文章分类、标签按所含文章数量倒序排列，且限制显示数量，增加查看更多超链接
 - 优化菜单栏功能，可在后台选择显示与隐藏菜单条目
 - 添加我的说说功能，可在后台发表想法
+- 优化归档页展示效果，文章按月份折叠展示
 
 ### V2.0
 2019.5.7，第二个版本，新增了很多功能，前端样式大改版，功能日渐完善，具体如下：
@@ -76,7 +78,7 @@ python manage.py runserver 127.0.0.1:8000
 - 登录用户可在导航栏查看评论消息通知，由`django-notifications-hq`驱动
 - 后台支持网站信息设置，包括标题，关键字、描述等
 
-
+##第一版
 ### V1.0
 2019.3.7，由`Django2.0`和`Python3.6`开发的个人博客网站首次上线，使用`Nginx+Gunicorn`部署于腾讯云服务器，功能尚且简陋，具体如下：
 - 前端模板仿制`Next`主题，后台管理替换为`Xadmin`

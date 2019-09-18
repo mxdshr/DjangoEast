@@ -8,21 +8,57 @@
 
 
 {% block content_left %}
-    <div class="django-panel">
+<div class="django-panel django-panel-padding">
+    <div class="mobile-archives">
         {% regroup posts|dictsort:"category_id" by category.name as post_list %}
-        <div class="article_box">
+        <h4 class="archives-year">共 {{ cate_count }} 类</h4>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             {% for posts in post_list %}
-                <section>
-                    <div class="news">
-                      <h2 class="article_box_title"><span><a href="/category/{% get_category_id posts.grouper %}">更多</a></span><b>{{ posts.grouper }}</b></h2>
-                          <ul>
-                              {% for post  in posts.list|slice:":8" %}
-                                  <li><a href="{{ post.get_absolute_url }}" target="_blank"><span>{{ post.created_time | date:"m-d" }}</span>{{ post.title }}</a> </li>
-                              {% endfor %}
-                          </ul>
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="heading{{ posts.grouper }}">
+                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ posts.grouper }}" aria-expanded="false" aria-controls="collapse{{ posts.grouper }}" class="collapsed">
+                            <h4 class="panel-title">
+                               {{ posts.grouper }} <span class="panel-title-count">共 {{ posts.list | length }} 篇</span>
+                            </h4>
+                        </a>
                     </div>
-                </section>
+                    <div id="collapse{{ posts.grouper }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ posts.grouper }}">
+                        <div class="panel-body">
+                              <ul>
+                                  {% for post  in posts.list %}
+                                      <li class="archives">
+                                            <span>{{ post.created_time | date:"Y.m.d" }}</span>&nbsp;&nbsp;&nbsp;
+                                            <a href="{{ post.get_absolute_url }}" target="_blank"><span></span>{{ post.title }}</a>
+                                            <span class="archives-view">{{ post.views }}&nbsp; views</span>
+                                      </li>
+                                  {% endfor %}
+                              </ul>
+                        </div>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     </div>
+</div>
 {% endblock %}
+
+
+
+{#旧版分类样式#}
+{#    <div class="django-panel">#}
+{#        {% regroup posts|dictsort:"category_id" by category.name as post_list %}#}
+{#        <div class="article_box">#}
+{#            {% for posts in post_list %}#}
+{#                <section>#}
+{#                    <div class="news">#}
+{#                      <h2 class="article_box_title"><span><a href="/category/{% get_category_id posts.grouper %}">更多</a></span><b>{{ posts.grouper }}</b></h2>#}
+{#                          <ul>#}
+{#                              {% for post  in posts.list|slice:":8" %}#}
+{#                                  <li><a href="{{ post.get_absolute_url }}" target="_blank"><span>{{ post.created_time | date:"m-d" }}</span>{{ post.title }}</a> </li>#}
+{#                              {% endfor %}#}
+{#                          </ul>#}
+{#                    </div>#}
+{#                </section>#}
+{#            {% endfor %}#}
+{#        </div>#}
+{#</div>#}

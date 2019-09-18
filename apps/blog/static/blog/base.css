@@ -1150,3 +1150,16 @@ div .reply_body{
 	-o-transform: scale(1.3);
 	-ms-transform: scale(1.3)
 }
+
+/*归档页折叠列表样式微调*/
+.panel .panel-heading h4{
+    margin: 5px!important;
+}
+
+.panel .panel-heading .panel-title-count{
+    float: right;
+}
+
+.archives-year{
+    text-align: center;
+}

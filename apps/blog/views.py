@@ -55,6 +55,11 @@ class Categories(ArticleListView):
     template_name = 'blog/category_list.html'
     paginate_by = None
 
+    def get_context_data(self, **kwargs):
+        self.cate_count = Category.objects.all().count()
+        kwargs['cate_count'] = self.cate_count
+        return super(Categories, self).get_context_data(**kwargs)
+
 
 # 各分类下的文章列表
 class CategoryView(ArticleListView):
