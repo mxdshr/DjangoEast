@@ -1,10 +1,8 @@
 # DjangoEast
-本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。是一个非常适合喜欢读书，喜欢看电影，喜欢做笔记，喜欢写代码的朋友使用的个人博客网站。欢迎有眼光的你下载下来使用一下~
 
-另外，我建了一个`Django`建站交流群，此群主要讨论与`Django`建站相关的问题。如果你在学习`Django`时或者在使用`DjangoEast`中遇到了任何问题，都可以在群里进行交流，我会给大家进行解答。我还会不定期在群里分享有关Django学习的资料，包括电子书，视频教程等。
+本网站基于`Django2.0`和`Python3.6`开发完成，前端样式由`Bootstrap`驱动，支持响应式布局，支持多种终端显示。
 
-如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
-
+![GitHub release](https://img.shields.io/github/release/mxdshr/DjangoEast.svg)  [![Requirements Status](https://requires.io/github/mxdshr/DjangoEast/requirements.svg?branch=master)](https://requires.io/github/mxdshr/DjangoEast/requirements/?branch=master) ![GitHub](https://img.shields.io/github/license/mxdshr/DjangoEast.svg)
 
 ## 1. 主要功能
 - 支持访客留言功能
@@ -28,7 +26,7 @@ git clone https://github.com/mxdshr/DjangoEast.git
 pip install -r requirements.txt
 ```
 ### 2.3 修改配置文件
-打开 `django/settings.py`文件，找到下面的代码，填写数据库信息
+打开 `django/settins/local.py`文件，找到下面的代码，填写数据库信息
 ```python
 DATABASES = {
     'default': {
@@ -54,6 +52,11 @@ python manage.py runserver 127.0.0.1:8000
 ```
 ## 3. 线上部署
 请参考：[(超详细)Django线上部署教程：腾讯云+Ubuntu+Django+Uwsgi](https://www.eastnotes.com/post/29)
+
+## 4.问题交流
+我建了一个`Django`建站交流群，此群主要讨论与`Django`建站相关的问题。如果你在学习`Django`时或者在使用`DjangoEast`中遇到了任何问题，都可以在群里进行交流，我会给大家进行解答。我还会不定期在群里分享有关Django学习的资料，包括电子书，视频教程等。
+
+如果你想学习`Django`建站，可以加我微信：`reborn0502`，备注`Django`，我拉你进群。
 ## 4.更新日志
 
 ### V2.1

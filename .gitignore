@@ -2,5 +2,3 @@
 *.xml
 .idea
 apps/*/migrations/*.py
-media/*
-static/*
