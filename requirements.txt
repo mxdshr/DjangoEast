@@ -40,7 +40,7 @@ jsonfield==2.0.2
 Markdown==3.1
 odfpy==1.4.0
 openpyxl==2.6.0
-Pillow==5.4.1
+Pillow==6.2.0
 pycparser==2.19
 Pygments==2.3.1
 PyMySQL==0.9.3
