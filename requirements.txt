@@ -32,7 +32,7 @@ elasticsearch==6.4.0
 elasticsearch-dsl==6.4.0
 et-xmlfile==1.0.1
 future==0.17.1
-httplib2==0.12.1
+httplib2==0.18.0
 idna==2.8
 jdcal==1.4
 jieba==0.39
