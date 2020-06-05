@@ -8,7 +8,7 @@ chardet==3.0.4
 cryptography==2.6.1
 defusedxml==0.5.0
 diff-match-patch==20181111
-Django==2.1.11
+Django==2.2.13
 django-ckeditor==5.6.1
 django-crequest==2018.5.11
 django-crispy-forms==1.7.2
