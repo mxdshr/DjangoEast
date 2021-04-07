@@ -1,7 +1,7 @@
 asn1crypto==0.24.0
 beautifulsoup4==4.7.1
 bleach==3.1.0
-bottle==0.12.16
+bottle==0.12.19
 certifi==2019.6.16
 cffi==1.12.3
 chardet==3.0.4
