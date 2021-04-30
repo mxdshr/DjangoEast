@@ -55,7 +55,7 @@ soupsieve==1.9.1
 sqlparse==0.2.4
 tablib==0.12.1
 unicodecsv==0.14.1
-urllib3==1.25.3
+urllib3==1.25.8
 webencodings==0.5.1
 WeRoBot==1.9.0
 Whoosh==2.7.4
